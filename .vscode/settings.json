@@ -1,0 +1,36 @@
+{
+    "cortex-debug.variableUseNaturalFormat": true,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    //"clangd.path": "/path/to/your/clangd",
+
+    "clangd.detectExtensionConflicts": true,
+    //"clangd.path": "C:/C/clangd_19.1.2/bin/clangd.exe",
+    // 查找的头文件路径，每一项前缀 -I
+    "clangd.fallbackFlags": [],
+    "clangd.arguments": [
+        // 在后台自动分析文件（基于complie_commands)
+        "--background-index",
+        // 标记compelie_commands.json文件的目录位置
+        // "--compile-commands-dir=build",
+        // 同时开启的任务数量
+        "-j=12",
+        // 全局补全（会自动补充头文件）
+        "--all-scopes-completion",
+        // 更详细的补全内容
+        "--completion-style=detailed",
+        // Include what you use
+        "--header-insertion=iwyu",
+        // pch优化的位置 disk memory
+        "--pch-storage=memory",
+        "--cross-file-rename",
+        "--enable-config",
+        // clang-format style to apply by default when no .clang-format file is found
+        "--fallback-style=WebKit",
+        "--pretty",
+        "--clang-tidy",
+        //"--header-insertion=never",
+        "--query-driver=**",
+    ]
+
+    
+}
