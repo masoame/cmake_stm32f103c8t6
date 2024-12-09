@@ -7,44 +7,69 @@
 
 namespace wifi{
 	using namespace std::chrono_literals;
-	esp8266::esp8266(UART_HandleTypeDef* esp8266_huart): ::serialport::Driver(esp8266_huart) {
+	esp8266::esp8266(UART_HandleTypeDef* esp8266_huart,const std::string& ssid, const std::string& password, const std::string& ip, unsigned short port): 
+		::serialport::Driver(esp8266_huart) ,
+		m_ssid(ssid),
+		m_password(password),
+		m_ip(ip),
+		m_port(port){
+			this->Reset();
+		}
+
+	bool esp8266::Reset(){
+		if(this->m_ssid.empty() || this->m_ssid =="" || this->m_password.empty() || this->m_password =="" || this->m_ip.empty() ||this->m_ip =="" || m_port == 0){
+			return false;
+		}
 		while(this->WifiIsConnected()==false){
-			if(this->ConnectWifi("gt", "1658932642")==true) break;
+			if(this->ConnectWifi(m_ssid, m_password) == serialport::Driver::RESPONSE_TYPE_OK) break;
+				common::LED1_Blink(4);
+		}
+		while(this->LinkTcp(m_ip, m_port) != serialport::Driver::RESPONSE_TYPE_OK){
 			common::LED1_Blink(4);
 		}
-		while(this->LinkTcp("113.219.237.121", 21004)==false){
-			common::LED1_Blink(4);
-		}
+		return true;
 	}
 
 	bool esp8266::PowerOn(){
-		return this->GetResponse({}, 1min, {"WIFI CONNECTED"}) == serialport::Driver::RESPONSE_TYPE_OK;
+		return this->GetResponse({}, 1min, {"WIFI CONNECTED"}) == Driver::ResponseType::RESPONSE_TYPE_OK;
 	}
 	bool esp8266::PowerOff(){
 
 	}
 
 	bool esp8266::WifiIsConnected(){
-		return this->GetResponse("AT+CWJAP_CUR?\r\n", 3s, {"No AP"}) == serialport::Driver::RESPONSE_TYPE_ERROR;
+		return this->GetResponse("AT+CWJAP_CUR?\r\n", 3s, {"No AP"}) == Driver::ResponseType::RESPONSE_TYPE_ERROR;
 	}
 
 
+	// bool esp8266::AddTcpLink(const std::string& ip, unsigned short port){
+	// 	for(auto&[_is, _ip,_port] : this->m_tcp_link)
+	// 	{
+	// 		if(_is==false){
+	// 			if(_ip == ip && _port == port) return true;
+	// 		}else{
+	// 			if(_ip == ip && _port == port) return true;
+	// 		}
+	// 	}
+	// 	return false;
+	// }
 
+	// esp8266::ResponseType esp8266::RemoveTcpLink(const std::string& ip, unsigned short port){
+	// 	for(auto&[_is, _ip,_port] : this->m_tcp_link)
+	// 	{
+	// 		if(_is==true && _ip == ip && _port == port){
+	// 			_is = false;
+	// 			return true;
+	// 		}
+	// 	}
+	// 	return false;
+	// }
 
 	
-	bool esp8266::ConnectWifi(const std::string& ssid, const std::string& password)
-	{
-		std::string _cmd;
-		int sz = std::snprintf(nullptr, 0, "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid.c_str(),password.c_str());
-		_cmd.resize(sz + 1); 
-		std::sprintf(_cmd.data(), "AT+CWJAP=\"%s\",\"%s\"\r\n", ssid.c_str(),password.c_str());
 
-		return this->GetResponse(_cmd,5s, {"WIFI CONNECTED"}) == serialport::Driver::RESPONSE_TYPE_OK;
-	}
 	bool esp8266::DisconnectWifi()
 	{
-		std::string _cmd = "AT+CWQAP\r\n";
-		return this->GetResponse(_cmd,2s, {"OK","busy"}) == serialport::Driver::RESPONSE_TYPE_OK;
+		return this->GetResponse("AT+CWQAP\r\n",2s, {"OK","busy p..."}) == Driver::ResponseType::RESPONSE_TYPE_OK;
 	}
 	
 	void esp8266::Ping([[maybe_unused]]const std::string& ip)
@@ -52,30 +77,34 @@ namespace wifi{
 		//std::string _cmd = std::vformat("AT+PING={}\r\n", std::make_format_args(ip));
 	}
 
-
-	bool esp8266::LinkTcp(const std::string& ip, unsigned short port)
-	{
-		std::string _cmd;
-		int sz = std::snprintf(nullptr, 0, "AT+CIPSTART=\"TCP\",\"%s\",%d\r\n", ip.c_str(), port);
-		_cmd.resize( sz + 1);
-		std::sprintf(_cmd.data(), "AT+CIPSTART=\"TCP\",\"%s\",%d\r\n", ip.c_str(), port);
-
-		return this->GetResponse(_cmd, 5s, {"OK","ALREADY CONNECTED"}) == serialport::Driver::RESPONSE_TYPE_OK;
-	}
-	bool esp8266::SendTcp(const std::string& data)
-	{
-		std::string _cmd;
-		int sz = std::snprintf(nullptr, 0, "AT+CIPSENDEX=%d\r\n",data.size());
-		_cmd.resize( sz + 1);
-		std::sprintf(_cmd.data(), "AT+CIPSENDEX=%d\r\n",data.size());
-
-		while(this->GetResponse(_cmd, 1s, {"\r\n>"}) != serialport::Driver::RESPONSE_TYPE_OK){}
-
-		return this->GetResponse(data, 4s, {"Recv","SEND OK","busy s..."}) != serialport::Driver::RESPONSE_TYPE_OK;
-	}
 	void esp8266::CloseTcp()
 	{
+
 	}
 
 
+	esp8266::Driver::ResponseFlag esp8266::ConnectWifi(const std::string& ssid, const std::string& password)
+	{
+		std::string _cmd =common::FormatString("AT+CWJAP=\"%s\",\"%s\"\r\n", ssid.c_str(), password.c_str());
+
+		return this->GetResponse(_cmd,5s, {"WIFI CONNECTED"});
+	}
+
+	esp8266::Driver::ResponseFlag esp8266::LinkTcp(const std::string& ip, unsigned short port)
+	{
+
+		std::string _cmd = common::FormatString("AT+CIPSTART=\"TCP\",\"%s\",%d\r\n", ip.c_str(), port);
+
+		return this->GetResponse(_cmd, 5s, {"OK","ALREADY CONNECTED"});
+	}
+
+	esp8266::Driver::ResponseFlag esp8266::SendTcp(const std::string& data)
+	{
+
+		std::string _cmd = common::FormatString("AT+CIPSENDEX=%d\r\n", data.size());
+
+		if(this->GetResponse(_cmd, 1s, {"\r\n>"}) != Driver::ResponseType::RESPONSE_TYPE_OK) return Driver::ResponseType::RESPONSE_TYPE_ERROR;
+
+		return this->GetResponse(data, 4s, {"Recv","SEND OK","busy s..."});
+	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <callback.hpp>
 #include <common.hpp>
+#include <cstdint>
 #include <memory>
 
 namespace serialport {
@@ -32,16 +33,48 @@ namespace serialport {
     	bool StartForwardSerialPort(::serialport::Driver& target_serialport) const;
 		bool StopForwardSerialPort() const;
         
-
-        enum ResponseType {
-            RESPONSE_TYPE_OK,
+        using ResponseType_Origin = uint8_t;
+        enum ResponseType: ResponseType_Origin
+        {
             RESPONSE_TYPE_ERROR,
+            RESPONSE_TYPE_OK,
             RESPONSE_TYPE_TIMEOUT,
-            RESPONSE_TYPE_BUSY,
             RESPONSE_TYPE_UNKNOWN,
         };
+        struct ResponseFlag{
+            union{
+                ResponseType _T;
+                ResponseType_Origin num;
+            } m_data;
+
+            inline operator ResponseType() const{
+                return static_cast<ResponseType>(m_data.num & 0x3);
+            }
+
+            inline operator uint8_t() const{
+                return (m_data.num >> 2);
+            }
+
+            inline Driver::ResponseFlag& operator=(ResponseType Type){
+                m_data.num &= ~0x3;
+                m_data.num |= Type;
+                return *this;
+            }
+
+            inline Driver::ResponseFlag& operator=(uint8_t num){
+                m_data.num &= 0x3;
+                m_data.num |= (num << 2);
+                return *this;
+            }
+
+            ResponseFlag(ResponseType Type):m_data{Type}{}
+            ResponseFlag():m_data{RESPONSE_TYPE_UNKNOWN}{}
+        };
+
+        //GetResponseType GetResponseType(const std::string& response) const;
+
         //bool Only
-        ResponseType GetResponse(const std::string& cmd,const std::chrono::milliseconds ms, const std::initializer_list<std::string>& search_list) const;
+        ResponseFlag GetResponse(const std::string& cmd,const std::chrono::milliseconds ms, const std::initializer_list<std::string>& search_list) const;
 
         
 

@@ -1,5 +1,6 @@
 #pragma once
 //--------------------------------------------
+#include <cstdio>
 #include<stm32f1xx_hal.h>
 #include<stm32f1xx_hal_uart.h>
 //--------------------------------------------
@@ -28,4 +29,14 @@ namespace common {
     }
 
     inline const auto LED1_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_13, std::placeholders::_1);
+
+    template<typename...  Args>
+    inline std::string FormatString(const char* format, Args&&... args){
+
+        int len = std::snprintf(nullptr, 0, format, args...);
+        std::string result(len + 1, '\0');
+        std::snprintf(&result[0], len + 1, format, args...);
+        return result;
+    }
+
 }

@@ -1,12 +1,16 @@
 #include "callback.hpp"
+#include <functional>
 
 
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t Size)
 {
-    huart->pRxBuffPtr[0]=0;
-	huart->pRxBuffPtr -= Size;
-    auto& receiveUartCallback = callback::UART_Handle_To_ReceiveUartCallback[huart->Instance];
+    if(huart->Instance == USART2){
+        huart->pRxBuffPtr[0]=0;
+        huart->pRxBuffPtr -= Size;
+    }
+
+    auto& receiveUartCallback = callback::UART_Handle_To_ReceiveUartCallback{}[huart->Instance];
 
     if(receiveUartCallback != nullptr) receiveUartCallback(reinterpret_cast<char*>(huart->pRxBuffPtr), Size);
     
@@ -15,9 +19,6 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t Size)
 
 namespace callback{
 
-    std::map<USART_TypeDef*,callback::UartCallbackType> UART_Handle_To_ReceiveUartCallback{
-        //{USART1,nullptr},
-        //{USART2,nullptr},
-        //{USART3,nullptr},
-    };
+    UartCallbackType UARTRecvCallback[4] {nullptr,nullptr,nullptr,nullptr};
+
 }
