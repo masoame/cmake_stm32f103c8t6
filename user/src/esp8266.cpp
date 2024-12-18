@@ -1,14 +1,11 @@
 #include"esp8266.hpp"
 #include "common.hpp"
 #include "serialport.hpp"
-#include <cstdio>
-
-
 
 namespace wifi{
 	using namespace std::chrono_literals;
 	esp8266::esp8266(UART_HandleTypeDef* esp8266_huart,const std::string& ssid, const std::string& password, const std::string& ip, unsigned short port): 
-		::serialport::Driver(esp8266_huart) ,
+		::serialport::Driver(esp8266_huart,serialport::Driver::INTERRUPT) ,
 		m_ssid(ssid),
 		m_password(password),
 		m_ip(ip),
@@ -37,39 +34,13 @@ namespace wifi{
 
 	}
 
-	bool esp8266::WifiIsConnected(){
+	inline bool esp8266::WifiIsConnected(){
 		return this->GetResponse("AT+CWJAP_CUR?\r\n", 3s, {"No AP"}) == Driver::ResponseType::RESPONSE_TYPE_ERROR;
 	}
-
-
-	// bool esp8266::AddTcpLink(const std::string& ip, unsigned short port){
-	// 	for(auto&[_is, _ip,_port] : this->m_tcp_link)
-	// 	{
-	// 		if(_is==false){
-	// 			if(_ip == ip && _port == port) return true;
-	// 		}else{
-	// 			if(_ip == ip && _port == port) return true;
-	// 		}
-	// 	}
-	// 	return false;
-	// }
-
-	// esp8266::ResponseType esp8266::RemoveTcpLink(const std::string& ip, unsigned short port){
-	// 	for(auto&[_is, _ip,_port] : this->m_tcp_link)
-	// 	{
-	// 		if(_is==true && _ip == ip && _port == port){
-	// 			_is = false;
-	// 			return true;
-	// 		}
-	// 	}
-	// 	return false;
-	// }
-
 	
-
 	bool esp8266::DisconnectWifi()
 	{
-		return this->GetResponse("AT+CWQAP\r\n",2s, {"OK","busy p..."}) == Driver::ResponseType::RESPONSE_TYPE_OK;
+		return this->GetResponse("AT+CWQAP\r\n",2s, {"OK","busy p..."},3) == Driver::ResponseType::RESPONSE_TYPE_OK;
 	}
 	
 	void esp8266::Ping([[maybe_unused]]const std::string& ip)
@@ -103,8 +74,8 @@ namespace wifi{
 
 		std::string _cmd = common::FormatString("AT+CIPSENDEX=%d\r\n", data.size());
 
-		if(this->GetResponse(_cmd, 1s, {"\r\n>"}) != Driver::ResponseType::RESPONSE_TYPE_OK) return Driver::ResponseType::RESPONSE_TYPE_ERROR;
+		if(this->GetResponse(_cmd, 500ms, {"\r\n>"}) != Driver::ResponseType::RESPONSE_TYPE_OK) return Driver::ResponseType::RESPONSE_TYPE_ERROR;
 
-		return this->GetResponse(data, 4s, {"Recv","SEND OK","busy s..."});
+		return this->GetResponse(data, 4s, {"busy s...","Recv","SEND OK"});
 	}
 }

@@ -5,15 +5,8 @@
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t Size)
 {
-    if(huart->Instance == USART2){
-        huart->pRxBuffPtr[0]=0;
-        huart->pRxBuffPtr -= Size;
-    }
-
     auto& receiveUartCallback = callback::UART_Handle_To_ReceiveUartCallback{}[huart->Instance];
-
     if(receiveUartCallback != nullptr) receiveUartCallback(reinterpret_cast<char*>(huart->pRxBuffPtr), Size);
-    
 }
 
 

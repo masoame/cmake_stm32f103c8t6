@@ -1,16 +1,15 @@
 #pragma once
-//--------------------------------------------
-#include <cstdio>
-#include<stm32f1xx_hal.h>
-#include<stm32f1xx_hal_uart.h>
-//--------------------------------------------
 #include<main.h>
-#include <cstdint>
 #include<string>
 #include<chrono>
 #include <functional>
 
 #define DISABLE_INTERRUPTS()  __asm__ __volatile__("": : :"memory")
+#define BREAK_POINT() __asm__ __volatile__("bkpt #0")
+
+//extern void HAL_Delay(uint32_t Delay);
+//extern void printf
+
 
 
 namespace common {
@@ -30,6 +29,9 @@ namespace common {
 
     inline const auto LED1_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_13, std::placeholders::_1);
 
+
+    extern void puts(const std::string& str);
+
     template<typename...  Args>
     inline std::string FormatString(const char* format, Args&&... args){
 
@@ -39,4 +41,13 @@ namespace common {
         return result;
     }
 
+    template <typename... Args>
+    inline void printf(const char* format, Args&&... args){
+        auto str = FormatString(format, std::forward<Args>(args)...);
+        puts(str);
+    }
+
+    inline __weak void puts(const std::string& str){
+
+    };
 }

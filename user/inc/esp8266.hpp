@@ -1,13 +1,5 @@
 #pragma once
-#include<common.hpp>
-#include "callback.hpp"
 #include "serialport.hpp"
-
-#include <initializer_list>
-#include<chrono>
-#include<tuple>
-
-
 
 namespace wifi {
 

@@ -1,12 +1,12 @@
 #include "serialport.hpp"
 #include "callback.hpp"
-#include "stm32f1xx_hal.h"
-#include <chrono>
+#include "stm32f1xx_hal_uart.h"
 #include <cstdint>
+
 
 namespace serialport {
 
-    Driver::Driver(UART_HandleTypeDef* huart):m_huart(huart),m_recv_buffer(new uint8_t[Driver::m_recv_buffer_size])
+    Driver::Driver(UART_HandleTypeDef* huart,DriverMode driver_type):m_huart(huart),m_recv_buffer(new uint8_t[Driver::m_recv_buffer_size]), m_recv_callback(callback::UART_Handle_To_ReceiveUartCallback{}[this->m_huart->Instance]), m_driver_type(driver_type)
     {
 
     }
@@ -15,41 +15,28 @@ namespace serialport {
 
     }
 
-
-
-    inline callback::UartCallbackType& Driver::GetRecvCallback() const{
-        return callback::UART_Handle_To_ReceiveUartCallback{}[this->m_huart->Instance];
-    }
-
-	inline void Driver::SetRecvCallback(const callback::UartCallbackType& recvCallback) const{
-		callback::UART_Handle_To_ReceiveUartCallback{}[this->m_huart->Instance] = recvCallback;
-	}
-
-	inline bool Driver::HasRecvCallback() const{
-		return callback::UART_Handle_To_ReceiveUartCallback{}[this->m_huart->Instance] != nullptr;
-	}
-
-	inline bool Driver::OpenAsyncRecv(callback::UartCallbackType task) const 
+	bool Driver::OpenAsyncRecv(callback::UartCallbackType task) const 
     {
-		auto& uart_recv_callback = this->GetRecvCallback();
+		if(this->m_recv_callback == nullptr){
 
-		if(uart_recv_callback == nullptr){
-
-			if(task != nullptr) this->SetRecvCallback(task);
+			if(task != nullptr) this->m_recv_callback = task;
 			
-			while(HAL_UARTEx_ReceiveToIdle_IT(this->m_huart, this->m_recv_buffer.get(), Driver::m_recv_buffer_size)== HAL_ERROR){}
+			if(HAL_UARTEx_ReceiveToIdle_DMA(this->m_huart, this->m_recv_buffer.get(), Driver::m_recv_buffer_size)!= HAL_OK){
+				return false;
+			}
 			return true;
 		} 
+		
 		return false;
 	}
 
-	inline bool Driver::ContinueAsyncRecv() const{
-        return HAL_UARTEx_ReceiveToIdle_IT(this->m_huart, this->m_recv_buffer.get(), Driver::m_recv_buffer_size) == HAL_OK;
+	bool Driver::ContinueAsyncRecv() const{
+        return HAL_UARTEx_ReceiveToIdle_DMA(this->m_huart, this->m_recv_buffer.get(), Driver::m_recv_buffer_size) == HAL_OK;
 	}
 
-	inline bool Driver::CloseAsyncRecv() const {
-        this->SetRecvCallback(nullptr);
-        return HAL_UART_AbortReceive(this->m_huart) == HAL_OK;
+	bool Driver::CloseAsyncRecv() const {
+        m_recv_callback = nullptr;
+        return HAL_UART_Abort(this->m_huart) == HAL_OK;
 	}
 
 	bool Driver::StartForwardSerialPort(::serialport::Driver& target_serialport) const
@@ -65,57 +52,46 @@ namespace serialport {
 	}
 
 
-	bool Driver::WaitForRecvCallback(const std::chrono::milliseconds _ms) const
-    {
-		uint32_t tickstart = HAL_GetTick();
-		uint32_t wait = _ms.count();
-		if (wait < HAL_MAX_DELAY)
-		{
-			wait += (uint32_t)(uwTickFreq);
-		}
-
-		auto& uart_recv_callback = this->GetRecvCallback();
-		
-		while((uart_recv_callback != nullptr) && ((HAL_GetTick() - tickstart) < wait)) {};
-
-		return uart_recv_callback == nullptr;
-	}
-
-	Driver::ResponseFlag Driver::GetResponse(const std::string& cmd,const std::chrono::milliseconds ms,const std::initializer_list<std::string>& search_list) const{
-
+	Driver::ResponseFlag Driver::GetResponse(const std::string& cmd,const std::chrono::milliseconds ms,const std::initializer_list<std::string>& search_list, const uint8_t count) const{
 		Driver::ResponseFlag flag;
+		auto str = this->GetResponseString(cmd, ms,count);
 
-		if(OpenAsyncRecv([this,&search_list,&flag](char* data, std::size_t len)->void{
-
-			char* _start = data;
-			char* _end = data + len;
-
-			flag = Driver::ResponseType::RESPONSE_TYPE_ERROR;
-			uint8_t num = 0;
-
-			for(auto& search_str : search_list){
-				if(std::search(_start, _end, search_str.begin(), search_str.end()) != _end){
-					flag = ResponseType::RESPONSE_TYPE_OK;
-					flag = num;
-					this->CloseAsyncRecv();
-					return;
-				}
-				num++;
-			}
-			this->ContinueAsyncRecv();
-		}) == false){
-			this->CloseAsyncRecv();
-			return ResponseType::RESPONSE_TYPE_UNKNOWN;
-		}
-
-		if(cmd.empty() == false && cmd.size()!=0 && HAL_UART_Transmit_IT(this->m_huart, reinterpret_cast<const uint8_t*>(cmd.data()), cmd.size())!= HAL_OK){
+		if(str.empty() == true || str ==""){
 			flag = ResponseType::RESPONSE_TYPE_UNKNOWN;
+			return flag;
 		}
-		
-		if(this->WaitForRecvCallback(ms)==false && flag != ResponseType::RESPONSE_TYPE_ERROR){
-			flag = ResponseType::RESPONSE_TYPE_TIMEOUT;
+		uint8_t num = 0;
+		for(const auto& search_str : search_list){
+			if(std::search(str.begin(), str.end(), search_str.begin(), search_str.end()) != str.end()){
+				flag = ResponseType::RESPONSE_TYPE_OK;
+				flag = num;
+				break;
+			}else{
+				flag = ResponseType::RESPONSE_TYPE_ERROR;
+			}
+			num++;
 		}
-        this->CloseAsyncRecv();
 		return flag;
+	}
+	std::string Driver::GetResponseString(const std::string& cmd,const std::chrono::milliseconds ms, const uint8_t count) const{
+		std::string response;
+		uint16_t RxLen;
+		if(cmd.empty() ==  false && cmd!=""){
+			auto ret  = HAL_UART_Transmit(&huart2, (const uint8_t*)cmd.c_str(), cmd.size(), ms.count());
+			if(ret != HAL_OK){
+				return {};
+			}
+		}
+		for(int i=0; i < count ;i++){
+			auto ret = HAL_UARTEx_ReceiveToIdle(this->m_huart, this->m_recv_buffer.get(), Driver::m_recv_buffer_size, &RxLen, ms.count());
+			if(ret == HAL_OK){
+				response.append(this->m_recv_buffer.get(), this->m_recv_buffer.get() + RxLen);
+			}else if(ret == HAL_TIMEOUT){
+				return response;
+			}else{
+				return {};
+			}
+		}
+		return response;
 	}
 }

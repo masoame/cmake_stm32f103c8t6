@@ -1,45 +1,37 @@
 #include"start_main.hpp"
-#include "callback.hpp"
-#include "common.hpp"
-#include"esp8266.hpp"
+#include"common.hpp"
 #include "main.h"
+#include "rc522.hpp"
+#include "esp8266.hpp"
+#include "atgm336h.hpp"
 #include "stm32f1xx_hal.h"
-#include "stm32f1xx_hal_uart.h"
-#include <cstdint>
-#include <cstring>
 
-
-
-void start_main() {
-
-	//gps::atgm336h _gps(&huart1);
-	// serialport::Driver _serialport(&huart1);
-	// serialport::Driver _serialport2(&huart2);
-
-	// _serialport.StartForwardSerialPort(_serialport2);
-	// _serialport2.StartForwardSerialPort(_serialport);
+void start_main() 
+{
+	// rfid::rc522 _rfid;
+	// _rfid.run();
 
 	wifi::esp8266 _wifi(&huart2,"gt","1658932642","113.219.237.121",21004);
-	//gps::atgm336h _gps(&huart1);
+	gps::atgm336h _gps(&huart1);
+	rfid::rc522 _rfid;
+	_wifi.SendTcp("hello world\r\n");
+
 	// serialport::Driver _serialport(&huart1);
 	// serialport::Driver _serialport2(&huart2);
 
 	// _serialport.StartForwardSerialPort(_serialport2);
 	// _serialport2.StartForwardSerialPort(_serialport);
 
-	char data[1024];
+	//_gps.SendForWifi(_wifi);
 
 
-	while (true) {
-		memset(data, 0, 512);
-		HAL_UART_Receive(&huart1, (uint8_t*)data, 512, 1000);
-
-		_wifi.SendTcp(data);
+	while(true)
+	{
 		common::LED1_Blink(2);
+		auto  a = _rfid.ReaderCard();
+		if(a.empty()==false) _wifi.SendTcp(a);
+
 	}
-	//√∞≈›≈≈–Ú
-	
-	
 
 }
 

@@ -1,5 +1,4 @@
 #pragma once
-#include<common.hpp>
 #include<serialport.hpp>
 namespace gps {
 
@@ -8,7 +7,9 @@ namespace gps {
 	public:
 		atgm336h(UART_HandleTypeDef* atgm336h_huart);
 		~atgm336h();
-	private:
+
+		void SendForWifi(serialport::Driver& wifi);
+
 
 	};
 }

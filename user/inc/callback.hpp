@@ -1,9 +1,8 @@
 #pragma once
 #include "common.hpp"
-#include "stm32f103xb.h"
 
 
-extern void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t Size);
+extern"C" void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t Size);
 
 namespace callback{
     using  UartCallbackType = std::function<void(char* ,std::size_t)>;

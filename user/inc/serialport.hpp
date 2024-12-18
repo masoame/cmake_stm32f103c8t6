@@ -4,22 +4,28 @@
 #include <cstdint>
 #include <memory>
 
+
 namespace serialport {
 
+    //template<DriverType driver_type = INTERRUPT>
     class Driver 
     {
+    public:
+
+        enum DriverMode{
+            DMA = 0,
+            INTERRUPT,
+            POLLING,
+        };
 
         UART_HandleTypeDef* m_huart;
-        constexpr static const std::size_t m_recv_buffer_size = 512;
+        callback::UartCallbackType& m_recv_callback;
 		std::unique_ptr<uint8_t[]> m_recv_buffer;
-    public:
-        Driver(UART_HandleTypeDef* huart);
-        ~Driver();
-    private:
+        DriverMode m_driver_type;
+        constexpr static const std::size_t m_recv_buffer_size = 512;
 
-        callback::UartCallbackType& GetRecvCallback() const;
-		void SetRecvCallback(const callback::UartCallbackType& recvCallback) const;
-		bool HasRecvCallback() const;
+        Driver(UART_HandleTypeDef* huart,DriverMode driver_type);
+        ~Driver();
         
 
 		bool OpenAsyncRecv(callback::UartCallbackType task = nullptr) const;
@@ -30,6 +36,7 @@ namespace serialport {
 		bool WaitForRecvCallback(const std::chrono::milliseconds ms) const;
 
     public:
+        
     	bool StartForwardSerialPort(::serialport::Driver& target_serialport) const;
 		bool StopForwardSerialPort() const;
         
@@ -55,13 +62,13 @@ namespace serialport {
                 return (m_data.num >> 2);
             }
 
-            inline Driver::ResponseFlag& operator=(ResponseType Type){
+            inline Driver::ResponseFlag& operator=(const ResponseType Type){
                 m_data.num &= ~0x3;
                 m_data.num |= Type;
                 return *this;
             }
 
-            inline Driver::ResponseFlag& operator=(uint8_t num){
+            inline Driver::ResponseFlag& operator=(const uint8_t num){
                 m_data.num &= 0x3;
                 m_data.num |= (num << 2);
                 return *this;
@@ -73,8 +80,9 @@ namespace serialport {
 
         //GetResponseType GetResponseType(const std::string& response) const;
 
-        //bool Only
-        ResponseFlag GetResponse(const std::string& cmd,const std::chrono::milliseconds ms, const std::initializer_list<std::string>& search_list) const;
+        ResponseFlag GetResponse(const std::string& cmd,const std::chrono::milliseconds ms, const std::initializer_list<std::string>& search_list, const uint8_t count = 1) const;
+        std::string GetResponseString(const std::string& cmd,const std::chrono::milliseconds ms, const uint8_t count = 1) const;
+        
 
         
 
