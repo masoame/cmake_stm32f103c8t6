@@ -1,12 +1,11 @@
 #include "serialport.hpp"
 #include "callback.hpp"
-#include "stm32f1xx_hal_uart.h"
 #include <cstdint>
 
 
 namespace serialport {
 
-    Driver::Driver(UART_HandleTypeDef* huart,DriverMode driver_type):m_huart(huart),m_recv_buffer(new uint8_t[Driver::m_recv_buffer_size]), m_recv_callback(callback::UART_Handle_To_ReceiveUartCallback{}[this->m_huart->Instance]), m_driver_type(driver_type)
+    Driver::Driver(UART_HandleTypeDef* huart,DriverMode driver_type):m_huart(huart),m_recv_buffer(new uint8_t[Driver::m_recv_buffer_size]), m_recv_callback(callback::UART_Handle_To_ReceiveUartCallback{}[this->m_huart->Instance])
     {
 
     }
@@ -79,7 +78,7 @@ namespace serialport {
 		if(cmd.empty() ==  false && cmd!=""){
 			auto ret  = HAL_UART_Transmit(&huart2, (const uint8_t*)cmd.c_str(), cmd.size(), ms.count());
 			if(ret != HAL_OK){
-				return {};
+				return response;
 			}
 		}
 		for(int i=0; i < count ;i++){
@@ -89,7 +88,7 @@ namespace serialport {
 			}else if(ret == HAL_TIMEOUT){
 				return response;
 			}else{
-				return {};
+				return response;
 			}
 		}
 		return response;

@@ -10,6 +10,7 @@ namespace serialport {
     //template<DriverType driver_type = INTERRUPT>
     class Driver 
     {
+        constexpr static const std::size_t m_recv_buffer_size = 512;
     public:
 
         enum DriverMode{
@@ -19,10 +20,9 @@ namespace serialport {
         };
 
         UART_HandleTypeDef* m_huart;
+        std::unique_ptr<uint8_t[]> m_recv_buffer;
         callback::UartCallbackType& m_recv_callback;
-		std::unique_ptr<uint8_t[]> m_recv_buffer;
-        DriverMode m_driver_type;
-        constexpr static const std::size_t m_recv_buffer_size = 512;
+
 
         Driver(UART_HandleTypeDef* huart,DriverMode driver_type);
         ~Driver();

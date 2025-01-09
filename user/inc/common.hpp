@@ -1,4 +1,5 @@
 #pragma once
+#include "stm32f103xb.h"
 #include<main.h>
 #include<string>
 #include<chrono>
@@ -6,11 +7,6 @@
 
 #define DISABLE_INTERRUPTS()  __asm__ __volatile__("": : :"memory")
 #define BREAK_POINT() __asm__ __volatile__("bkpt #0")
-
-//extern void HAL_Delay(uint32_t Delay);
-//extern void printf
-
-
 
 namespace common {
 
@@ -41,13 +37,24 @@ namespace common {
         return result;
     }
 
+    inline __weak void puts([[maybe_unused]] const std::string& str){
+
+    };
+
     template <typename... Args>
     inline void printf(const char* format, Args&&... args){
         auto str = FormatString(format, std::forward<Args>(args)...);
         puts(str);
     }
 
-    inline __weak void puts(const std::string& str){
-
-    };
+    inline void delay_ns(uint32_t ns)
+    {
+        volatile uint32_t i;
+        for(i=0;i<ns;i++)
+        {
+            __asm("nop");
+            __asm("nop");
+            __asm("nop");
+        }
+    }
 }

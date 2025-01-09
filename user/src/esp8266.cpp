@@ -24,6 +24,7 @@ namespace wifi{
 		while(this->LinkTcp(m_ip, m_port) != serialport::Driver::RESPONSE_TYPE_OK){
 			common::LED1_Blink(4);
 		}
+		this->SendTcp("hello world\r\n");
 		return true;
 	}
 

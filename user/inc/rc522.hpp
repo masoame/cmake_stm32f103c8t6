@@ -1,23 +1,27 @@
 #pragma once
 #include <common.hpp>
 		
+#include "common.hpp"
 #include "main.h"
+#include "stm32f103xb.h"
 
 
-#define RC522_SDA_Pin GPIO_PIN_8
-#define RC522_SDA_GPIO_Port GPIOB
-#define RC522_RST_Pin GPIO_PIN_9
-#define RC522_RST_GPIO_Port GPIOB
+constexpr inline auto RC522_SDA_Pin = GPIO_PIN_8;
+constexpr inline auto RC522_SDA_GPIO_Port = GPIOB_BASE;
+constexpr inline auto RC522_RST_Pin = GPIO_PIN_9;
+constexpr inline auto RC522_RST_GPIO_Port = GPIOB_BASE;
 
 
 //------------------------------- RC522引脚定义 ------------------------------//
 
-#define RC522_SDA_HIGH  	HAL_GPIO_WritePin(GPIOB, RC522_SDA_Pin, GPIO_PIN_SET)
-#define RC522_SDA_LOW  	HAL_GPIO_WritePin(GPIOB, RC522_SDA_Pin, GPIO_PIN_RESET)
+//#define RC522_SDA_HIGH()  	HAL_GPIO_WritePin(GPIOB, RC522_SDA_Pin, GPIO_PIN_SET)
+// inline const auto RC522_SDA_HIGH = std::bind(HAL_GPIO_WritePin,GPIOB, RC522_SDA_Pin, GPIO_PIN_SET);
+
+// #define RC522_SDA_LOW  	    HAL_GPIO_WritePin(GPIOB, RC522_SDA_Pin, GPIO_PIN_RESET)
 
 
-#define RC522_RST_HIGH	HAL_GPIO_WritePin(GPIOB, RC522_RST_Pin, GPIO_PIN_SET)
-#define RC522_RST_LOW		HAL_GPIO_WritePin(GPIOB, RC522_RST_Pin, GPIO_PIN_RESET)
+// #define RC522_RST_HIGH	    HAL_GPIO_WritePin(GPIOB, RC522_RST_Pin, GPIO_PIN_SET)
+// #define RC522_RST_LOW		HAL_GPIO_WritePin(GPIOB, RC522_RST_Pin, GPIO_PIN_RESET)
 
 
 #define MAXRLEN        18
@@ -131,18 +135,12 @@
 //                    RC522通讯返回错误代码                         /
 //******************************************************************/
 #define MI_ERR                      0xFE 
-//#define MI_ERR                         //(-2)
 
+#define MI_OK                       0x00 
+#define MI_CHK_OK                   0x00 
+#define MI_CRC_ZERO                 0x00 
 
-// Mifare Error Codes 
-// Each function returns a status value, which corresponds to the 
-// mifare error codes. 
-
-#define MI_OK                          0 
-#define MI_CHK_OK                      0 
-#define MI_CRC_ZERO                    0 
-
-#define MI_CRC_NOTZERO                 1 
+#define MI_CRC_NOTZERO              0x01 
 
 #define MI_NOTAGERR                 0xFF 
 #define MI_CHK_FAILED               0xFF 
@@ -211,57 +209,16 @@
 #define MI_WRONG_VALUE              0x86 
 #define MI_VALERR                   0x85
 
-//******************************************************************/
-//                         函数定义                                 /
-//******************************************************************/
-void RC522_Init(void);
-char RC522_ReadWriteByte(uint8_t TxData);
-void delay_ns(uint32_t ns);
-
-char PcdHalt(void)                                                           ;
-char PcdReset(void)                                                          ;
-void PcdAntennaOn(void)                                                      ;
-void PcdAntennaOff(void)                                                     ;
-char PcdRequest(unsigned char req_code,unsigned char *pTagType)              ;
-
-char PcdAnticoll(unsigned char *pSnr)                                        ;
-char PcdSelect(unsigned char *pSnr)                                          ;         
-char PcdAuthState(unsigned char auth_mode,unsigned char addr,
-                  unsigned char *pKey,unsigned char *pSnr)                   ;     
-char PcdRead(unsigned char addr,unsigned char *pData)                        ;     
-char PcdWrite(unsigned char addr,unsigned char *pData)                       ;    
-char PcdValue(unsigned char dd_mode,unsigned char addr,unsigned char *pValue);   
-char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr)           ;  
-char MF522PcdConfigISOType(unsigned char  type);
-char PcdComMF522(unsigned char Command, unsigned char *pInData, 
-                 unsigned char InLenByte,unsigned char *pOutData, 
-                 unsigned int  *pOutLenBit                       )           ;
-void CalulateCRC(unsigned char *pIndata,unsigned char len,
-                 unsigned char *pOutData                  )                  ;
-void WriteRawRC(unsigned char Address,unsigned char value)                   ;
-unsigned char ReadRawRC(unsigned char Address)                               ; 
-void SetBitMask(unsigned char reg,unsigned char mask)                        ; 
-void ClearBitMask(unsigned char reg,unsigned char mask)                      ; 
-char Read_Block(unsigned char Block,unsigned char *Buf)                      ;
-char Write_Block(unsigned char Block)                                        ;
-void PcdAntennaTestOn(void)                                                  ;
 
 
-extern char KK[8]                                                            ; // 数据加密密钥
-extern unsigned char RF_Buffer[18]                                           ; // 射频卡数据缓冲区
-extern unsigned char UID[5]                                                  ;
-extern unsigned char Password_Buffer[6]                                      ;
-extern void Uart1_SendByte(uint32_t ch);
-// extern void Des_Encrypt(char* In, char* K,char* Out)                         ;
-// extern void Des_Decrypt(char* In, char* K,char* Out)                         ;
-extern unsigned char des_on                                                  ; // DES加密标志
-
-
-
-
-
-
-
+// extern char KK[8]                                                            ; // 数据加密密钥
+// extern unsigned char RF_Buffer[18]                                           ; // 射频卡数据缓冲区
+// extern unsigned char UID[5]                                                  ;
+// extern unsigned char Password_Buffer[6]                                      ;
+// extern void Uart1_SendByte(uint32_t ch);
+// // extern void Des_Encrypt(char* In, char* K,char* Out)                         ;
+// // extern void Des_Decrypt(char* In, char* K,char* Out)                         ;
+// extern unsigned char des_on                                                  ; // DES加密标志
 
 
 
@@ -269,11 +226,43 @@ namespace rfid {
     class rc522 {
     public:
         rc522();
+        rc522(SPI_HandleTypeDef* const hspi, GPIO_TypeDef* const sda_port,const uint16_t sda_pin,GPIO_TypeDef* const rst_port,const uint16_t rst_pin);
         ~rc522();
+        
+        char PcdReset();
+        void PcdAntennaOn();
+        void PcdAntennaOff();
+        char PcdRequest(unsigned char req_code,unsigned char *pTagType);
+        char PcdAnticoll(unsigned char *pSnr);
+        char PcdComMF522(unsigned char Command  ,unsigned char *pInData , unsigned char InLenByte,unsigned char *pOutData, unsigned int  *pOutLenBit);
+
         std::string ReaderCard(void);
 
-        unsigned char m_uid[5];
+private:
+        unsigned char m_uid[4];
+        SPI_HandleTypeDef* const m_hspi;
+        GPIO_TypeDef* const m_sda_port, * const m_rst_port;
+        const uint16_t m_sda_pin, m_rst_pin;
+
+        char RC522_ReadWriteByte(uint8_t TxData);
+        unsigned char ReadRawRC(unsigned char Address);
+        void WriteRawRC(unsigned char Address, unsigned char value);
+        void SetBitMask(unsigned char reg,unsigned char mask);
+        void ClearBitMask(unsigned char reg,unsigned char mask);
+
+
+        inline void RC522_SDA_HIGH(){
+            HAL_GPIO_WritePin(m_sda_port, m_sda_pin, GPIO_PIN_SET);
+        }
+        inline void RC522_SDA_LOW(){
+            HAL_GPIO_WritePin(m_sda_port, m_sda_pin, GPIO_PIN_RESET);
+        }
+        inline void RC522_RST_HIGH(){
+            HAL_GPIO_WritePin(m_rst_port, m_rst_pin, GPIO_PIN_SET);
+        }
+        inline void RC522_RST_LOW(){
+            HAL_GPIO_WritePin(m_rst_port, m_rst_pin, GPIO_PIN_RESET);
+        }
+        
     };
-
-
 }
