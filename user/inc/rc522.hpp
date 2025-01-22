@@ -1,66 +1,44 @@
 #pragma once
 #include <common.hpp>
-		
-#include "common.hpp"
-#include "main.h"
 #include "stm32f103xb.h"
-
-
-constexpr inline auto RC522_SDA_Pin = GPIO_PIN_8;
-constexpr inline auto RC522_SDA_GPIO_Port = GPIOB_BASE;
-constexpr inline auto RC522_RST_Pin = GPIO_PIN_9;
-constexpr inline auto RC522_RST_GPIO_Port = GPIOB_BASE;
-
-
-//------------------------------- RC522Òı½Å¶¨Òå ------------------------------//
-
-//#define RC522_SDA_HIGH()  	HAL_GPIO_WritePin(GPIOB, RC522_SDA_Pin, GPIO_PIN_SET)
-// inline const auto RC522_SDA_HIGH = std::bind(HAL_GPIO_WritePin,GPIOB, RC522_SDA_Pin, GPIO_PIN_SET);
-
-// #define RC522_SDA_LOW  	    HAL_GPIO_WritePin(GPIOB, RC522_SDA_Pin, GPIO_PIN_RESET)
-
-
-// #define RC522_RST_HIGH	    HAL_GPIO_WritePin(GPIOB, RC522_RST_Pin, GPIO_PIN_SET)
-// #define RC522_RST_LOW		HAL_GPIO_WritePin(GPIOB, RC522_RST_Pin, GPIO_PIN_RESET)
-
 
 #define MAXRLEN        18
 #define MIN_STRENGTH  228
 //******************************************************************/
-//                    RC522 FIFO³¤¶È¶¨Òå                            /
+//                    RC522 FIFOé•¿åº¦å®šä¹‰                            /
 //******************************************************************/
 #define DEF_FIFO_LENGTH             64           //FIFO size=64byte
 
 //******************************************************************/
-//                       RC522ÃüÁî×Ö                                /
+//                       RC522å‘½ä»¤å­—                                /
 //******************************************************************/
-#define PCD_IDLE                  0x00           //È¡Ïûµ±Ç°ÃüÁî
-#define PCD_AUTHENT               0x0E           //ÑéÖ¤ÃÜÔ¿
-#define PCD_RECEIVE               0x08           //½ÓÊÕÊı¾İ
-#define PCD_TRANSMIT              0x04           //·¢ËÍÊı¾İ
-#define PCD_TRANSCEIVE            0x0C           //·¢ËÍ²¢½ÓÊÕÊı¾İ
-#define PCD_RESETPHASE            0x0F           //¸´Î»
-#define PCD_CALCCRC               0x03           //CRC¼ÆËã
+#define PCD_IDLE                  0x00           //å–æ¶ˆå½“å‰å‘½ä»¤
+#define PCD_AUTHENT               0x0E           //éªŒè¯å¯†é’¥
+#define PCD_RECEIVE               0x08           //æ¥æ”¶æ•°æ®
+#define PCD_TRANSMIT              0x04           //å‘é€æ•°æ®
+#define PCD_TRANSCEIVE            0x0C           //å‘é€å¹¶æ¥æ”¶æ•°æ®
+#define PCD_RESETPHASE            0x0F           //å¤ä½
+#define PCD_CALCCRC               0x03           //CRCè®¡ç®—
 
 //******************************************************************/
-//                   Mifare_One¿¨Æ¬ÃüÁî×Ö                          */
+//                   Mifare_Oneå¡ç‰‡å‘½ä»¤å­—                          */
 //******************************************************************/
-#define PICC_REQIDL               0x26           //Ñ°ÌìÏßÇøÄÚÎ´½øÈëĞİÃß×´Ì¬
-#define PICC_REQALL               0x52           //Ñ°ÌìÏßÇøÄÚÈ«²¿¿¨
-#define PICC_ANTICOLL1            0x93           //·À³å×²
-#define PICC_ANTICOLL2            0x95           //·À³å×²
-#define PICC_AUTHENT1A            0x60           //ÑéÖ¤AÃÜÔ¿
-#define PICC_AUTHENT1B            0x61           //ÑéÖ¤BÃÜÔ¿
-#define PICC_READ                 0x30           //¶Á¿é
-#define PICC_WRITE                0xA0           //Ğ´¿é
-#define PICC_DECREMENT            0xC0           //¿Û¿î
-#define PICC_INCREMENT            0xC1           //³äÖµ
-#define PICC_RESTORE              0xC2           //µ÷¿éÊı¾İµ½»º³åÇø
-#define PICC_TRANSFER             0xB0           //±£´æ»º³åÇøÖĞÊı¾İ
-#define PICC_HALT                 0x50           //ĞİÃß
+#define PICC_REQIDL               0x26           //å¯»å¤©çº¿åŒºå†…æœªè¿›å…¥ä¼‘çœ çŠ¶æ€
+#define PICC_REQALL               0x52           //å¯»å¤©çº¿åŒºå†…å…¨éƒ¨å¡
+#define PICC_ANTICOLL1            0x93           //é˜²å†²æ’
+#define PICC_ANTICOLL2            0x95           //é˜²å†²æ’
+#define PICC_AUTHENT1A            0x60           //éªŒè¯Aå¯†é’¥
+#define PICC_AUTHENT1B            0x61           //éªŒè¯Bå¯†é’¥
+#define PICC_READ                 0x30           //è¯»å—
+#define PICC_WRITE                0xA0           //å†™å—
+#define PICC_DECREMENT            0xC0           //æ‰£æ¬¾
+#define PICC_INCREMENT            0xC1           //å……å€¼
+#define PICC_RESTORE              0xC2           //è°ƒå—æ•°æ®åˆ°ç¼“å†²åŒº
+#define PICC_TRANSFER             0xB0           //ä¿å­˜ç¼“å†²åŒºä¸­æ•°æ®
+#define PICC_HALT                 0x50           //ä¼‘çœ 
 
 //******************************************************************/
-//                        MF522¼Ä´æÆ÷¶¨Òå                           /
+//                        MF522å¯„å­˜å™¨å®šä¹‰                           /
 //******************************************************************/
 // PAGE 0
 #define     RFU00                 0x00    
@@ -129,10 +107,10 @@ constexpr inline auto RC522_RST_GPIO_Port = GPIOB_BASE;
 #define     RFU3C                 0x3C   
 #define     RFU3D                 0x3D   
 #define     RFU3E                 0x3E   
-#define     RFU3F		  0x3F
+#define     RFU3F		          0x3F
 
 //******************************************************************/
-//                    RC522Í¨Ñ¶·µ»Ø´íÎó´úÂë                         /
+//                    RC522é€šè®¯è¿”å›é”™è¯¯ä»£ç                          /
 //******************************************************************/
 #define MI_ERR                      0xFE 
 
@@ -209,23 +187,9 @@ constexpr inline auto RC522_RST_GPIO_Port = GPIOB_BASE;
 #define MI_WRONG_VALUE              0x86 
 #define MI_VALERR                   0x85
 
-
-
-// extern char KK[8]                                                            ; // Êı¾İ¼ÓÃÜÃÜÔ¿
-// extern unsigned char RF_Buffer[18]                                           ; // ÉäÆµ¿¨Êı¾İ»º³åÇø
-// extern unsigned char UID[5]                                                  ;
-// extern unsigned char Password_Buffer[6]                                      ;
-// extern void Uart1_SendByte(uint32_t ch);
-// // extern void Des_Encrypt(char* In, char* K,char* Out)                         ;
-// // extern void Des_Decrypt(char* In, char* K,char* Out)                         ;
-// extern unsigned char des_on                                                  ; // DES¼ÓÃÜ±êÖ¾
-
-
-
 namespace rfid {
     class rc522 {
     public:
-        rc522();
         rc522(SPI_HandleTypeDef* const hspi, GPIO_TypeDef* const sda_port,const uint16_t sda_pin,GPIO_TypeDef* const rst_port,const uint16_t rst_pin);
         ~rc522();
         
@@ -241,7 +205,8 @@ namespace rfid {
 private:
         unsigned char m_uid[4];
         SPI_HandleTypeDef* const m_hspi;
-        GPIO_TypeDef* const m_sda_port, * const m_rst_port;
+        
+        GPIO_TypeDef* const  m_sda_port, * const m_rst_port;
         const uint16_t m_sda_pin, m_rst_pin;
 
         char RC522_ReadWriteByte(uint8_t TxData);
@@ -249,7 +214,6 @@ private:
         void WriteRawRC(unsigned char Address, unsigned char value);
         void SetBitMask(unsigned char reg,unsigned char mask);
         void ClearBitMask(unsigned char reg,unsigned char mask);
-
 
         inline void RC522_SDA_HIGH(){
             HAL_GPIO_WritePin(m_sda_port, m_sda_pin, GPIO_PIN_SET);
@@ -263,6 +227,5 @@ private:
         inline void RC522_RST_LOW(){
             HAL_GPIO_WritePin(m_rst_port, m_rst_pin, GPIO_PIN_RESET);
         }
-        
     };
 }

@@ -5,7 +5,7 @@
 
 namespace serialport {
 
-    Driver::Driver(UART_HandleTypeDef* huart,DriverMode driver_type):m_huart(huart),m_recv_buffer(new uint8_t[Driver::m_recv_buffer_size]), m_recv_callback(callback::UART_Handle_To_ReceiveUartCallback{}[this->m_huart->Instance])
+    Driver::Driver(UART_HandleTypeDef* huart,[[ maybe_unused ]]DriverMode driver_type):m_huart(huart),m_recv_buffer(new uint8_t[Driver::m_recv_buffer_size]), m_recv_callback(callback::UART_Handle_To_ReceiveUartCallback{}[this->m_huart->Instance])
     {
 
     }

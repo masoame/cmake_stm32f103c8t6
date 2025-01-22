@@ -1,8 +1,6 @@
 #include"atgm336h.hpp"
 #include "serialport.hpp"
 #include <algorithm>
-#include <cstdint>
-#include <optional>
 #include"esp8266.hpp"
 
 namespace gps {

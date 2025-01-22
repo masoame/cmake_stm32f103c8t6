@@ -6,30 +6,30 @@
 
 //uint8_t UID[5],Temp[4];          
 // uint8_t RF_Buffer[18];
-// uint8_t Password_Buffer[6]={0xFF,0xFF,0xFF,0xFF,0xFF,0xFF}; // Mifare One È±Ê¡ÃÜÂë
+// uint8_t Password_Buffer[6]={0xFF,0xFF,0xFF,0xFF,0xFF,0xFF}; // Mifare One ç¼ºçœå¯†ç 
 
 // void RC522_Init(void)
 // {
 // 	RC522_SDA_LOW;
-// 	HAL_SPI_Transmit(&hspi2, (uint8_t *)0xaa, sizeof(uint8_t), 0xFF);//Æô¶¯´«Êä	
+// 	HAL_SPI_Transmit(&hspi2, (uint8_t *)0xaa, sizeof(uint8_t), 0xFF);//å¯åŠ¨ä¼ è¾“	
 // 	RC522_SDA_HIGH();
 
 //   HAL_Delay(50);
-//   PcdReset();//¸´Î»RC522¶Á¿¨Æ÷
+//   PcdReset();//å¤ä½RC522è¯»å¡å™¨
 //   HAL_Delay(10);
-//   PcdReset();//¸´Î»RC522¶Á¿¨Æ÷
+//   PcdReset();//å¤ä½RC522è¯»å¡å™¨
 //   HAL_Delay(10);
-//   PcdAntennaOff();//¹Ø±ÕÌìÏß·¢Éä                                                         
+//   PcdAntennaOff();//å…³é—­å¤©çº¿å‘å°„                                                         
 //   HAL_Delay(10);	 
-//   PcdAntennaOn();//¿ªÆôÌìÏß·¢Éä
-// 	common::printf<>("RFID-MFRC522 ³õÊ¼»¯Íê³É\r\nFindCard Starting ...\r\n");  //²âÊÔÒı½Å³õÊ¼»¯Íê³É
+//   PcdAntennaOn();//å¼€å¯å¤©çº¿å‘å°„
+// 	common::printf<>("RFID-MFRC522 åˆå§‹åŒ–å®Œæˆ\r\nFindCard Starting ...\r\n");  //æµ‹è¯•å¼•è„šåˆå§‹åŒ–å®Œæˆ
 // }
 
 
 
-//SPIx ¶ÁĞ´Ò»¸ö×Ö½Ú
-//TxData:ÒªĞ´ÈëµÄ×Ö½Ú
-//·µ»ØÖµ:¶ÁÈ¡µ½µÄ×Ö½Ú
+//SPIx è¯»å†™ä¸€ä¸ªå­—èŠ‚
+//TxData:è¦å†™å…¥çš„å­—èŠ‚
+//è¿”å›å€¼:è¯»å–åˆ°çš„å­—èŠ‚
 //***************************************************************************/
 
 // char RC522_ReadWriteByte(uint8_t TxData)
@@ -40,9 +40,9 @@
 // }
 
 // //******************************************************************/
-// //¹¦    ÄÜ£º¶ÁRC522¼Ä´æÆ÷
-// //²ÎÊıËµÃ÷£ºAddress[IN]:¼Ä´æÆ÷µØÖ·
-// //·µ    »Ø£º¶Á³öµÄÖµ
+// //åŠŸ    èƒ½ï¼šè¯»RC522å¯„å­˜å™¨
+// //å‚æ•°è¯´æ˜ï¼šAddress[IN]:å¯„å­˜å™¨åœ°å€
+// //è¿”    å›ï¼šè¯»å‡ºçš„å€¼
 // //******************************************************************/
 // unsigned char ReadRawRC(unsigned char Address)
 // {
@@ -60,9 +60,9 @@
 // }
 
 // //******************************************************************/
-// //¹¦    ÄÜ£ºĞ´RC522¼Ä´æÆ÷
-// //²ÎÊıËµÃ÷£ºAddress[IN]:¼Ä´æÆ÷µØÖ·
-// //          value[IN]:Ğ´ÈëµÄÖµ
+// //åŠŸ    èƒ½ï¼šå†™RC522å¯„å­˜å™¨
+// //å‚æ•°è¯´æ˜ï¼šAddress[IN]:å¯„å­˜å™¨åœ°å€
+// //          value[IN]:å†™å…¥çš„å€¼
 // //******************************************************************/
 // void WriteRawRC(unsigned char Address, unsigned char value)
 // {
@@ -78,9 +78,9 @@
 // }
 
 // //******************************************************************/
-// //¹¦    ÄÜ£ºÖÃRC522¼Ä´æÆ÷Î»
-// //²ÎÊıËµÃ÷£ºreg[IN]:¼Ä´æÆ÷µØÖ·
-// //          mask[IN]:ÖÃÎ»Öµ
+// //åŠŸ    èƒ½ï¼šç½®RC522å¯„å­˜å™¨ä½
+// //å‚æ•°è¯´æ˜ï¼šreg[IN]:å¯„å­˜å™¨åœ°å€
+// //          mask[IN]:ç½®ä½å€¼
 // //******************************************************************/
 // void SetBitMask(unsigned char reg,unsigned char mask)  
 // {
@@ -90,9 +90,9 @@
 // }
 
 // //******************************************************************/
-// //¹¦    ÄÜ£ºÇåRC522¼Ä´æÆ÷Î»
-// //²ÎÊıËµÃ÷£ºreg[IN]:¼Ä´æÆ÷µØÖ·
-// //          mask[IN]:ÇåÎ»Öµ
+// //åŠŸ    èƒ½ï¼šæ¸…RC522å¯„å­˜å™¨ä½
+// //å‚æ•°è¯´æ˜ï¼šreg[IN]:å¯„å­˜å™¨åœ°å€
+// //          mask[IN]:æ¸…ä½å€¼
 // //******************************************************************/
 // void ClearBitMask(unsigned char reg,unsigned char mask)  
 // {
@@ -102,8 +102,8 @@
 // } 
 
 // //******************************************************************/
-// //¹¦    ÄÜ£º¸´Î»RC522
-// //·µ    »Ø: ³É¹¦·µ»ØMI_OK
+// //åŠŸ    èƒ½ï¼šå¤ä½RC522
+// //è¿”    å›: æˆåŠŸè¿”å›MI_OK
 // //******************************************************************/
 // char PcdReset()
 // {
@@ -115,27 +115,27 @@
 //   common::delay_ns(10);
 //   WriteRawRC(CommandReg,PCD_RESETPHASE);
 //   common::delay_ns(100);
-//   WriteRawRC(ModeReg,0x3D);                  //¶¨Òå·¢ËÍºÍ½ÓÊÕ³£ÓÃÄ£Ê½ ºÍMifare¿¨Í¨Ñ¶£¬CRC³õÊ¼Öµ0x6363
-//   WriteRawRC(TReloadRegL,30);                //16Î»¶¨Ê±Æ÷µÍÎ» 30
-//   WriteRawRC(TReloadRegH,0);                 //16Î»¶¨Ê±Æ÷¸ßÎ»
-//   WriteRawRC(TModeReg,0x8D);                 //¶¨ÒåÄÚ²¿¶¨Ê±Æ÷µÄÉèÖÃ
-//   WriteRawRC(TPrescalerReg,0x3E);            //ÉèÖÃ¶¨Ê±Æ÷·ÖÆµÏµÊı  
-//   WriteRawRC(TxASKReg,0x40);                 //µ÷ÖÆ·¢ËÍĞÅºÅÎª100%ASK
+//   WriteRawRC(ModeReg,0x3D);                  //å®šä¹‰å‘é€å’Œæ¥æ”¶å¸¸ç”¨æ¨¡å¼ å’ŒMifareå¡é€šè®¯ï¼ŒCRCåˆå§‹å€¼0x6363
+//   WriteRawRC(TReloadRegL,30);                //16ä½å®šæ—¶å™¨ä½ä½ 30
+//   WriteRawRC(TReloadRegH,0);                 //16ä½å®šæ—¶å™¨é«˜ä½
+//   WriteRawRC(TModeReg,0x8D);                 //å®šä¹‰å†…éƒ¨å®šæ—¶å™¨çš„è®¾ç½®
+//   WriteRawRC(TPrescalerReg,0x3E);            //è®¾ç½®å®šæ—¶å™¨åˆ†é¢‘ç³»æ•°  
+//   WriteRawRC(TxASKReg,0x40);                 //è°ƒåˆ¶å‘é€ä¿¡å·ä¸º100%ASK
 //   return MI_OK; 
 // }
 ////////////////////////////////////////////////////////////////////// 
-//ÉèÖÃRC522µÄ¹¤×÷·½Ê½   
+//è®¾ç½®RC522çš„å·¥ä½œæ–¹å¼   
 //////////////////////////////////////////////////////////////////////
 // char MF522PcdConfigISOType(unsigned char  type)
 // {
 // 	if (type == 'A')	//ISO14443_A
 // 		{
-// 			ClearBitMask(Status2Reg,0x08);	//×´Ì¬2¼Ä´æÆ÷         
-// 			WriteRawRC(ModeReg,0x3D);	//3F  //ºÍMifare¿¨Í¨Ñ¶£¬CRC³õÊ¼Öµ0x6363         
-// 			WriteRawRC(RxSelReg,0x86);	//84   Ñ¡ÔñÄÚ²¿½ÓÊÕÆ÷ÉèÖÃ£¬ÄÚ²¿Ä£Äâ²¿·Öµ÷ÖÆĞÅºÅ£¬·¢ËÍÊı¾İºó£¬ÑÓ³Ù6¸öÎ»Ê±ÖÓ£¬½ÓÊÕ         
-// 			WriteRawRC(RFCfgReg,0x7F);	//4F  ÅäÖÃ½ÓÊÕÆ÷  48dB×î´óÔöÒæ         
+// 			ClearBitMask(Status2Reg,0x08);	//çŠ¶æ€2å¯„å­˜å™¨         
+// 			WriteRawRC(ModeReg,0x3D);	//3F  //å’ŒMifareå¡é€šè®¯ï¼ŒCRCåˆå§‹å€¼0x6363         
+// 			WriteRawRC(RxSelReg,0x86);	//84   é€‰æ‹©å†…éƒ¨æ¥æ”¶å™¨è®¾ç½®ï¼Œå†…éƒ¨æ¨¡æ‹Ÿéƒ¨åˆ†è°ƒåˆ¶ä¿¡å·ï¼Œå‘é€æ•°æ®åï¼Œå»¶è¿Ÿ6ä¸ªä½æ—¶é’Ÿï¼Œæ¥æ”¶         
+// 			WriteRawRC(RFCfgReg,0x7F);	//4F  é…ç½®æ¥æ”¶å™¨  48dBæœ€å¤§å¢ç›Š         
 // 			WriteRawRC(TReloadRegL,30);	//tmoLength);TReloadVal = 'h6a =tmoLength(dec)      
-// 			WriteRawRC(TReloadRegH,0);	//Êµ¼ÊÖµÊÇOXD3E Õâ²¿·ÖÖ÷ÒªÊÇÉèÖÃ¶¨Ê±Æ÷¼Ä´æÆ÷       
+// 			WriteRawRC(TReloadRegH,0);	//å®é™…å€¼æ˜¯OXD3E è¿™éƒ¨åˆ†ä¸»è¦æ˜¯è®¾ç½®å®šæ—¶å™¨å¯„å­˜å™¨       
 // 			WriteRawRC(TModeReg,0x8D);
 // 			WriteRawRC(TPrescalerReg,0x3E);
 // 			common::delay_ns(1000);
@@ -146,8 +146,8 @@
 // }  
 
 // //******************************************************************/
-// //¿ªÆôÌìÏß·¢Éä  
-// //Ã¿´ÎÆô¶¯»ò¹Ø±ÕÌìÏÕ·¢ÉäÖ®¼äÓ¦ÖÁÉÙÓĞ1msµÄ¼ä¸ô
+// //å¼€å¯å¤©çº¿å‘å°„  
+// //æ¯æ¬¡å¯åŠ¨æˆ–å…³é—­å¤©é™©å‘å°„ä¹‹é—´åº”è‡³å°‘æœ‰1msçš„é—´éš”
 // //******************************************************************/
 // void PcdAntennaOn()
 // {
@@ -162,7 +162,7 @@
 
 
 // //******************************************************************/
-// //¹Ø±ÕÌìÏß·¢Éä
+// //å…³é—­å¤©çº¿å‘å°„
 // //******************************************************************/
 // void PcdAntennaOff()
 // {
@@ -170,12 +170,12 @@
 // }
 
 // //******************************************************************/
-// //¹¦    ÄÜ£ºÍ¨¹ıRC522ºÍISO14443¿¨Í¨Ñ¶
-// //²ÎÊıËµÃ÷£ºCommand[IN]:RC522ÃüÁî×Ö
-// //          pInData[IN]:Í¨¹ıRC522·¢ËÍµ½¿¨Æ¬µÄÊı¾İ
-// //          InLenByte[IN]:·¢ËÍÊı¾İµÄ×Ö½Ú³¤¶È
-// //          pOutData[OUT]:½ÓÊÕµ½µÄ¿¨Æ¬·µ»ØÊı¾İ
-// //          *pOutLenBit[OUT]:·µ»ØÊı¾İµÄÎ»³¤¶È
+// //åŠŸ    èƒ½ï¼šé€šè¿‡RC522å’ŒISO14443å¡é€šè®¯
+// //å‚æ•°è¯´æ˜ï¼šCommand[IN]:RC522å‘½ä»¤å­—
+// //          pInData[IN]:é€šè¿‡RC522å‘é€åˆ°å¡ç‰‡çš„æ•°æ®
+// //          InLenByte[IN]:å‘é€æ•°æ®çš„å­—èŠ‚é•¿åº¦
+// //          pOutData[OUT]:æ¥æ”¶åˆ°çš„å¡ç‰‡è¿”å›æ•°æ®
+// //          *pOutLenBit[OUT]:è¿”å›æ•°æ®çš„ä½é•¿åº¦
 // //******************************************************************/
 // char PcdComMF522(unsigned char Command  ,unsigned char *pInData , 
 //                  unsigned char InLenByte,unsigned char *pOutData, 
@@ -203,13 +203,13 @@
 //   WriteRawRC(ComIEnReg,irqEn|0x80)              ; //
 //   ClearBitMask(ComIrqReg,0x80)                  ;
 //   WriteRawRC(CommandReg,PCD_IDLE)               ;
-//   SetBitMask(FIFOLevelReg,0x80)                 ; // Çå¿ÕFIFO 
+//   SetBitMask(FIFOLevelReg,0x80)                 ; // æ¸…ç©ºFIFO 
 //   for(i=0; i<InLenByte; i++)
-//     WriteRawRC(FIFODataReg,pInData[i])          ; // Êı¾İĞ´ÈëFIFO 
-//   WriteRawRC(CommandReg, Command)               ; // ÃüÁîĞ´ÈëÃüÁî¼Ä´æÆ÷
+//     WriteRawRC(FIFODataReg,pInData[i])          ; // æ•°æ®å†™å…¥FIFO 
+//   WriteRawRC(CommandReg, Command)               ; // å‘½ä»¤å†™å…¥å‘½ä»¤å¯„å­˜å™¨
 //   if(Command == PCD_TRANSCEIVE)
-//     SetBitMask(BitFramingReg,0x80)              ; // ¿ªÊ¼·¢ËÍ     
-//   i = 6000                                      ; //¸ù¾İÊ±ÖÓÆµÂÊµ÷Õû£¬²Ù×÷M1¿¨×î´óµÈ´ıÊ±¼ä25ms
+//     SetBitMask(BitFramingReg,0x80)              ; // å¼€å§‹å‘é€     
+//   i = 6000                                      ; //æ ¹æ®æ—¶é’Ÿé¢‘ç‡è°ƒæ•´ï¼Œæ“ä½œM1å¡æœ€å¤§ç­‰å¾…æ—¶é—´25ms
 //   do 
 //   {
 //     n = ReadRawRC(ComIrqReg)                    ;
@@ -249,17 +249,17 @@
 // }
 
 //******************************************************************/
-//¹¦    ÄÜ£ºÑ°¿¨                                                    /
-//²ÎÊıËµÃ÷: req_code[IN]:Ñ°¿¨·½Ê½                                   /
-//                0x52 = Ñ°¸ĞÓ¦ÇøÄÚËùÓĞ·ûºÏ14443A±ê×¼µÄ¿¨           /
-//                0x26 = Ñ°Î´½øÈëĞİÃß×´Ì¬µÄ¿¨                       /
-//                pTagType[OUT]£º¿¨Æ¬ÀàĞÍ´úÂë                       /
+//åŠŸ    èƒ½ï¼šå¯»å¡                                                    /
+//å‚æ•°è¯´æ˜: req_code[IN]:å¯»å¡æ–¹å¼                                   /
+//                0x52 = å¯»æ„Ÿåº”åŒºå†…æ‰€æœ‰ç¬¦åˆ14443Aæ ‡å‡†çš„å¡           /
+//                0x26 = å¯»æœªè¿›å…¥ä¼‘çœ çŠ¶æ€çš„å¡                       /
+//                pTagType[OUT]ï¼šå¡ç‰‡ç±»å‹ä»£ç                        /
 //                0x4400 = Mifare_UltraLight                        /
 //                0x0400 = Mifare_One(S50)                          /
 //                0x0200 = Mifare_One(S70)                          /
 //                0x0800 = Mifare_Pro(X)                            /
 //                0x4403 = Mifare_DESFire                           /
-//·µ    »Ø: ³É¹¦·µ»ØMI_OK                                           /
+//è¿”    å›: æˆåŠŸè¿”å›MI_OK                                           /
 //******************************************************************/
 // char PcdRequest(unsigned char req_code,unsigned char *pTagType)
 // {
@@ -267,9 +267,9 @@
 //   unsigned int  unLen                                ;
 //   unsigned char ucComMF522Buf[MAXRLEN]               ; 
 
-//   ClearBitMask(Status2Reg,0x08)                      ;//Çå³ıMRCrypto1on£¬ÒªÓÃÈí¼şÇåÁã
-//   WriteRawRC(BitFramingReg,0x07)                     ;//startsend=0,rxalign=0,ÔÚFIFOÖĞ´æ·ÅµÄÎ»ÖÃ£¬TXlastbit=7
-//   SetBitMask(TxControlReg,0x03)                      ;//TX2rfen=1,TX1RFen=1,´«µİµ÷ÖÆµÄ13.56MHZµÄÔØ²¨ĞÅºÅ
+//   ClearBitMask(Status2Reg,0x08)                      ;//æ¸…é™¤MRCrypto1onï¼Œè¦ç”¨è½¯ä»¶æ¸…é›¶
+//   WriteRawRC(BitFramingReg,0x07)                     ;//startsend=0,rxalign=0,åœ¨FIFOä¸­å­˜æ”¾çš„ä½ç½®ï¼ŒTXlastbit=7
+//   SetBitMask(TxControlReg,0x03)                      ;//TX2rfen=1,TX1RFen=1,ä¼ é€’è°ƒåˆ¶çš„13.56MHZçš„è½½æ³¢ä¿¡å·
  
 //   ucComMF522Buf[0] = req_code                        ;
 
@@ -289,9 +289,9 @@
 
 
 //******************************************************************/
-//¹¦    ÄÜ£º·À³å×²                                                  /
-//²ÎÊıËµÃ÷: pSnr[OUT]:¿¨Æ¬ĞòÁĞºÅ£¬4×Ö½Ú                             /
-//·µ    »Ø: ³É¹¦·µ»ØMI_OK                                           /
+//åŠŸ    èƒ½ï¼šé˜²å†²æ’                                                  /
+//å‚æ•°è¯´æ˜: pSnr[OUT]:å¡ç‰‡åºåˆ—å·ï¼Œ4å­—èŠ‚                             /
+//è¿”    å›: æˆåŠŸè¿”å›MI_OK                                           /
 //******************************************************************/
 // char PcdAnticoll(unsigned char *pSnr)
 // {
@@ -300,9 +300,9 @@
 //     unsigned int  unLen;
 //     unsigned char ucComMF522Buf[MAXRLEN]; 
     
-//     ClearBitMask(Status2Reg,0x08);//Çå³ıMRCrypto1on£¬ÒªÓÃÈí¼şÇåÁã
-//     WriteRawRC(BitFramingReg,0x00);//±íÊ¾×îºóÒ»¸ö×Ö½ÚËùÓĞÎ»¶¼·¢ËÍ
-//     ClearBitMask(CollReg,0x80);//CollRegCollReg0³åÍ»½áÊøºó³åÍ»Î»±»ÖÃÁã
+//     ClearBitMask(Status2Reg,0x08);//æ¸…é™¤MRCrypto1onï¼Œè¦ç”¨è½¯ä»¶æ¸…é›¶
+//     WriteRawRC(BitFramingReg,0x00);//è¡¨ç¤ºæœ€åä¸€ä¸ªå­—èŠ‚æ‰€æœ‰ä½éƒ½å‘é€
+//     ClearBitMask(CollReg,0x80);//CollRegCollReg0å†²çªç»“æŸåå†²çªä½è¢«ç½®é›¶
  
 //     ucComMF522Buf[0] = PICC_ANTICOLL1;
 //     ucComMF522Buf[1] = 0x20;
@@ -320,44 +320,16 @@
 //          {   status = MI_ERR;    }
 //     }
     
-//     SetBitMask(CollReg,0x80);//CollRegCollReg ÔÚ106kbpsÁ¼ºÃµÄ·À³åÍ»Çé¿öÏÂ¸ÃÎ»ÖÃ1
+//     SetBitMask(CollReg,0x80);//CollRegCollReg åœ¨106kbpsè‰¯å¥½çš„é˜²å†²çªæƒ…å†µä¸‹è¯¥ä½ç½®1
 //     return status;
 // }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////
-//¹¦    ÄÜ£ºÑ¡¶¨¿¨Æ¬
-//²ÎÊıËµÃ÷: pSnr[IN]:¿¨Æ¬ĞòÁĞºÅ£¬4×Ö½Ú
-//·µ    »Ø: ³É¹¦·µ»ØMI_OK
+//åŠŸ    èƒ½ï¼šé€‰å®šå¡ç‰‡
+//å‚æ•°è¯´æ˜: pSnr[IN]:å¡ç‰‡åºåˆ—å·ï¼Œ4å­—èŠ‚
+//è¿”    å›: æˆåŠŸè¿”å›MI_OK
 /////////////////////////////////////////////////////////////////////
 //char PcdSelect(unsigned char *pSnr)
 //{
@@ -376,7 +348,7 @@
 //    }
 //    CalulateCRC(ucComMF522Buf,7,&ucComMF522Buf[7]);
 //  
-//    ClearBitMask(Status2Reg,0x08);//ÇåÁãMFcryon
+//    ClearBitMask(Status2Reg,0x08);//æ¸…é›¶MFcryon
 
 //    status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,9,ucComMF522Buf,&unLen);
 //    
@@ -389,14 +361,14 @@
 //}
 
 ////******************************************************************/
-////¹¦    ÄÜ£ºÑéÖ¤¿¨Æ¬ÃÜÂë
-////²ÎÊıËµÃ÷: auth_mode[IN]: ÃÜÂëÑéÖ¤Ä£Ê½
-////                 0x60 = ÑéÖ¤AÃÜÔ¿
-////                 0x61 = ÑéÖ¤BÃÜÔ¿ 
-////          addr[IN]£º¿éµØÖ·
-////          pKey[IN]£ºÃÜÂë
-////          pSnr[IN]£º¿¨Æ¬ĞòÁĞºÅ£¬4×Ö½Ú
-////·µ    »Ø: ³É¹¦·µ»ØMI_OK
+////åŠŸ    èƒ½ï¼šéªŒè¯å¡ç‰‡å¯†ç 
+////å‚æ•°è¯´æ˜: auth_mode[IN]: å¯†ç éªŒè¯æ¨¡å¼
+////                 0x60 = éªŒè¯Aå¯†é’¥
+////                 0x61 = éªŒè¯Bå¯†é’¥ 
+////          addr[IN]ï¼šå—åœ°å€
+////          pKey[IN]ï¼šå¯†ç 
+////          pSnr[IN]ï¼šå¡ç‰‡åºåˆ—å·ï¼Œ4å­—èŠ‚
+////è¿”    å›: æˆåŠŸè¿”å›MI_OK
 ////******************************************************************/
 //char PcdAuthState(unsigned char auth_mode,unsigned char addr,
 //                  unsigned char *pKey,unsigned char *pSnr    )
@@ -405,8 +377,8 @@
 //    unsigned int  unLen;
 //    unsigned char i,ucComMF522Buf[MAXRLEN]; 
 
-//    ucComMF522Buf[0] = auth_mode;//ÑéÖ¤AÃÜÔ¿
-//    ucComMF522Buf[1] = addr;//addr[IN]£º¿éµØÖ·
+//    ucComMF522Buf[0] = auth_mode;//éªŒè¯Aå¯†é’¥
+//    ucComMF522Buf[1] = addr;//addr[IN]ï¼šå—åœ°å€
 //    for (i=0; i<6; i++)
 //    {    ucComMF522Buf[i+2] = *(pKey+i);   }
 //    for (i=0; i<6; i++)
@@ -420,10 +392,10 @@
 //}
 
 ////******************************************************************/
-////¹¦    ÄÜ£º¶ÁÈ¡M1¿¨Ò»¿éÊı¾İ
-////²ÎÊıËµÃ÷: addr[IN]£º¿éµØÖ·
-////          pData[OUT]£º¶Á³öµÄÊı¾İ£¬16×Ö½Ú
-////·µ    »Ø: ³É¹¦·µ»ØMI_OK
+////åŠŸ    èƒ½ï¼šè¯»å–M1å¡ä¸€å—æ•°æ®
+////å‚æ•°è¯´æ˜: addr[IN]ï¼šå—åœ°å€
+////          pData[OUT]ï¼šè¯»å‡ºçš„æ•°æ®ï¼Œ16å­—èŠ‚
+////è¿”    å›: æˆåŠŸè¿”å›MI_OK
 ////******************************************************************/
 //char PcdRead(unsigned char addr,unsigned char *pData)
 //{
@@ -447,10 +419,10 @@
 //}
 
 ////******************************************************************/
-////¹¦    ÄÜ£º¶ÁÈ¡M1¿¨Ò»¿éÊı¾İ
-////²ÎÊıËµÃ÷: addr[IN]£º¿éµØÖ·
-////          pData[OUT]£º¶Á³öµÄÊı¾İ£¬16×Ö½Ú
-////·µ    »Ø: ³É¹¦·µ»ØMI_OK
+////åŠŸ    èƒ½ï¼šè¯»å–M1å¡ä¸€å—æ•°æ®
+////å‚æ•°è¯´æ˜: addr[IN]ï¼šå—åœ°å€
+////          pData[OUT]ï¼šè¯»å‡ºçš„æ•°æ®ï¼Œ16å­—èŠ‚
+////è¿”    å›: æˆåŠŸè¿”å›MI_OK
 ////******************************************************************/
 //char Read_Block(unsigned char Block,unsigned char *Buf)
 //{
@@ -471,10 +443,10 @@
 //}
 
 ////******************************************************************/
-////¹¦    ÄÜ£ºĞ´Êı¾İµ½M1¿¨Ò»¿é
-////²ÎÊıËµÃ÷: addr[IN]£º¿éµØÖ·
-////          pData[IN]£ºĞ´ÈëµÄÊı¾İ£¬16×Ö½Ú
-////·µ    »Ø: ³É¹¦·µ»ØMI_OK
+////åŠŸ    èƒ½ï¼šå†™æ•°æ®åˆ°M1å¡ä¸€å—
+////å‚æ•°è¯´æ˜: addr[IN]ï¼šå—åœ°å€
+////          pData[IN]ï¼šå†™å…¥çš„æ•°æ®ï¼Œ16å­—èŠ‚
+////è¿”    å›: æˆåŠŸè¿”å›MI_OK
 ////******************************************************************/
 //char PcdWrite(unsigned char addr,unsigned char *pData)
 //{
@@ -504,10 +476,10 @@
 //  return status                                           ;
 //}
 ////******************************************************************/
-////¹¦    ÄÜ£ºĞ´Êı¾İµ½M1¿¨Ò»¿é
-////²ÎÊıËµÃ÷: addr[IN]£º¿éµØÖ·
-////          pData[IN]£ºĞ´ÈëµÄÊı¾İ£¬16×Ö½Ú
-////·µ    »Ø: ³É¹¦·µ»ØMI_OK
+////åŠŸ    èƒ½ï¼šå†™æ•°æ®åˆ°M1å¡ä¸€å—
+////å‚æ•°è¯´æ˜: addr[IN]ï¼šå—åœ°å€
+////          pData[IN]ï¼šå†™å…¥çš„æ•°æ®ï¼Œ16å­—èŠ‚
+////è¿”    å›: æˆåŠŸè¿”å›MI_OK
 ////******************************************************************/
 
 //char Write_Block(unsigned char Block)
@@ -526,13 +498,13 @@
 //}
 
 ////******************************************************************/
-////¹¦    ÄÜ£º¿Û¿îºÍ³äÖµ
-////²ÎÊıËµÃ÷: dd_mode[IN]£ºÃüÁî×Ö
-////               0xC0 = ¿Û¿î
-////               0xC1 = ³äÖµ
-////          addr[IN]£ºÇ®°üµØÖ·
-////          pValue[IN]£º4×Ö½ÚÔö(¼õ)Öµ£¬µÍÎ»ÔÚÇ°
-////·µ    »Ø: ³É¹¦·µ»ØMI_OK
+////åŠŸ    èƒ½ï¼šæ‰£æ¬¾å’Œå……å€¼
+////å‚æ•°è¯´æ˜: dd_mode[IN]ï¼šå‘½ä»¤å­—
+////               0xC0 = æ‰£æ¬¾
+////               0xC1 = å……å€¼
+////          addr[IN]ï¼šé’±åŒ…åœ°å€
+////          pValue[IN]ï¼š4å­—èŠ‚å¢(å‡)å€¼ï¼Œä½ä½åœ¨å‰
+////è¿”    å›: æˆåŠŸè¿”å›MI_OK
 ////******************************************************************/
 //char PcdValue(unsigned char dd_mode,unsigned char addr,unsigned char *pValue)
 //{
@@ -575,10 +547,10 @@
 //}
 
 ////******************************************************************/
-////¹¦    ÄÜ£º±¸·İÇ®°ü
-////²ÎÊıËµÃ÷: sourceaddr[IN]£ºÔ´µØÖ·
-////          goaladdr[IN]£ºÄ¿±êµØÖ·
-////·µ    »Ø: ³É¹¦·µ»ØMI_OK
+////åŠŸ    èƒ½ï¼šå¤‡ä»½é’±åŒ…
+////å‚æ•°è¯´æ˜: sourceaddr[IN]ï¼šæºåœ°å€
+////          goaladdr[IN]ï¼šç›®æ ‡åœ°å€
+////è¿”    å›: æˆåŠŸè¿”å›MI_OK
 ////******************************************************************/
 //char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr)
 //{
@@ -626,8 +598,8 @@
 
 
 //******************************************************************/
-//¹¦    ÄÜ£ºÃüÁî¿¨Æ¬½øÈëĞİÃß×´Ì¬
-//·µ    »Ø: ³É¹¦·µ»ØMI_OK
+//åŠŸ    èƒ½ï¼šå‘½ä»¤å¡ç‰‡è¿›å…¥ä¼‘çœ çŠ¶æ€
+//è¿”    å›: æˆåŠŸè¿”å›MI_OK
 //******************************************************************/
 //char PcdHalt(void)
 //{
@@ -645,8 +617,8 @@
 //}
 
 //******************************************************************/
-//¹¦    ÄÜ£ºÃüÁî¿¨Æ¬½øÈëĞİÃß×´Ì¬
-//·µ    »Ø: ³É¹¦·µ»ØMI_OK
+//åŠŸ    èƒ½ï¼šå‘½ä»¤å¡ç‰‡è¿›å…¥ä¼‘çœ çŠ¶æ€
+//è¿”    å›: æˆåŠŸè¿”å›MI_OK
 //******************************************************************/
 //char MIF_Halt(void)
 //{
@@ -666,14 +638,14 @@
 
 
 //******************************************************************/
-//ÓÃMF522¼ÆËãCRC16º¯Êı
+//ç”¨MF522è®¡ç®—CRC16å‡½æ•°
 //******************************************************************/
 //void CalulateCRC(unsigned char *pIndata,unsigned char len,unsigned char *pOutData)
 //{
 //    unsigned char i,n;
 //    ClearBitMask(DivIrqReg,0x04);
-//    WriteRawRC(CommandReg,PCD_IDLE);//È¡Ïûµ±Ç°ÃüÁî
-//    SetBitMask(FIFOLevelReg,0x80);//FlushBuffer Çå³ıErrReg µÄ±êÖ¾Î»
+//    WriteRawRC(CommandReg,PCD_IDLE);//å–æ¶ˆå½“å‰å‘½ä»¤
+//    SetBitMask(FIFOLevelReg,0x80);//FlushBuffer æ¸…é™¤ErrReg çš„æ ‡å¿—ä½
 //    for (i=0; i<len; i++)
 //    {   WriteRawRC(FIFODataReg, *(pIndata+i));   }
 //    WriteRawRC(CommandReg, PCD_CALCCRC);
@@ -683,8 +655,8 @@
 //        n = ReadRawRC(DivIrqReg);
 //        i--;
 //    }
-//    while ((i!=0) && !(n&0x04));//µ±CRCIRqËùÓĞÊı¾İ±»´¦ÀíÍê±Ï¸ÃÎ»ÖÃÎ»
-//    pOutData[0] = ReadRawRC(CRCResultRegL);//ÏÔÊ¾¼ÆËã³öÀ´µÄCRCÖµ
+//    while ((i!=0) && !(n&0x04));//å½“CRCIRqæ‰€æœ‰æ•°æ®è¢«å¤„ç†å®Œæ¯•è¯¥ä½ç½®ä½
+//    pOutData[0] = ReadRawRC(CRCResultRegL);//æ˜¾ç¤ºè®¡ç®—å‡ºæ¥çš„CRCå€¼
 //    pOutData[1] = ReadRawRC(CRCResultRegM);
 //}
 
@@ -697,21 +669,18 @@ namespace rfid {
       : m_hspi(hspi), m_sda_port(sda_port), m_sda_pin(sda_pin), m_rst_port(rst_port), m_rst_pin(rst_pin)
     {
       	this->RC522_SDA_LOW();
-        HAL_SPI_Transmit(this->m_hspi, (uint8_t *)0xaa, sizeof(uint8_t), 0xFF);//Æô¶¯´«Êä	
+        HAL_SPI_Transmit(this->m_hspi, (uint8_t *)0xaa, sizeof(uint8_t), 0xFF);//å¯åŠ¨ä¼ è¾“	
         this->RC522_SDA_HIGH();
 
         HAL_Delay(50);
-        this->PcdReset();//¸´Î»RC522¶Á¿¨Æ÷
+        this->PcdReset();//å¤ä½RC522è¯»å¡å™¨
         HAL_Delay(10);
-        this->PcdReset();//¸´Î»RC522¶Á¿¨Æ÷
+        this->PcdReset();//å¤ä½RC522è¯»å¡å™¨
         HAL_Delay(10);
-        PcdAntennaOff();//¹Ø±ÕÌìÏß·¢Éä                                                         
+        this->PcdAntennaOff();//å…³é—­å¤©çº¿å‘å°„                                                         
         HAL_Delay(10);	 
-        PcdAntennaOn();//¿ªÆôÌìÏß·¢Éä
-        //common::printf("RFID-MFRC522 ³õÊ¼»¯Íê³É\r\nFindCard Starting ...\r\n");  //²âÊÔÒı½Å³õÊ¼»¯Íê³É
-    }
-    rc522::~rc522(){
-        
+        this->PcdAntennaOn();//å¼€å¯å¤©çº¿å‘å°„
+        //common::printf("RFID-MFRC522 åˆå§‹åŒ–å®Œæˆ\r\nFindCard Starting ...\r\n");  //æµ‹è¯•å¼•è„šåˆå§‹åŒ–å®Œæˆ
     }
     char rc522::PcdReset()
     {
@@ -723,12 +692,12 @@ namespace rfid {
         common::delay_ns(10);
         this->WriteRawRC(CommandReg,PCD_RESETPHASE);
         common::delay_ns(100);
-        this->WriteRawRC(ModeReg,0x3D);                  //¶¨Òå·¢ËÍºÍ½ÓÊÕ³£ÓÃÄ£Ê½ ºÍMifare¿¨Í¨Ñ¶£¬CRC³õÊ¼Öµ0x6363
-        this->WriteRawRC(TReloadRegL,30);                //16Î»¶¨Ê±Æ÷µÍÎ» 30
-        this->WriteRawRC(TReloadRegH,0);                 //16Î»¶¨Ê±Æ÷¸ßÎ»
-        this->WriteRawRC(TModeReg,0x8D);                 //¶¨ÒåÄÚ²¿¶¨Ê±Æ÷µÄÉèÖÃ
-        this->WriteRawRC(TPrescalerReg,0x3E);            //ÉèÖÃ¶¨Ê±Æ÷·ÖÆµÏµÊı  
-        this->WriteRawRC(TxASKReg,0x40);                 //µ÷ÖÆ·¢ËÍĞÅºÅÎª100%ASK
+        this->WriteRawRC(ModeReg,0x3D);                  //å®šä¹‰å‘é€å’Œæ¥æ”¶å¸¸ç”¨æ¨¡å¼ å’ŒMifareå¡é€šè®¯ï¼ŒCRCåˆå§‹å€¼0x6363
+        this->WriteRawRC(TReloadRegL,30);                //16ä½å®šæ—¶å™¨ä½ä½ 30
+        this->WriteRawRC(TReloadRegH,0);                 //16ä½å®šæ—¶å™¨é«˜ä½
+        this->WriteRawRC(TModeReg,0x8D);                 //å®šä¹‰å†…éƒ¨å®šæ—¶å™¨çš„è®¾ç½®
+        this->WriteRawRC(TPrescalerReg,0x3E);            //è®¾ç½®å®šæ—¶å™¨åˆ†é¢‘ç³»æ•°  
+        this->WriteRawRC(TxASKReg,0x40);                 //è°ƒåˆ¶å‘é€ä¿¡å·ä¸º100%ASK
         return MI_OK; 
     }
     char rc522::PcdRequest(unsigned char req_code,unsigned char *pTagType)
@@ -737,9 +706,9 @@ namespace rfid {
       unsigned int  unLen                                ;
       unsigned char ucComMF522Buf[MAXRLEN]               ; 
 
-      this->ClearBitMask(Status2Reg,0x08)                      ;//Çå³ıMRCrypto1on£¬ÒªÓÃÈí¼şÇåÁã
-      this->WriteRawRC(BitFramingReg,0x07)                     ;//startsend=0,rxalign=0,ÔÚFIFOÖĞ´æ·ÅµÄÎ»ÖÃ£¬TXlastbit=7
-      this->SetBitMask(TxControlReg,0x03)                      ;//TX2rfen=1,TX1RFen=1,´«µİµ÷ÖÆµÄ13.56MHZµÄÔØ²¨ĞÅºÅ
+      this->ClearBitMask(Status2Reg,0x08)                      ;//æ¸…é™¤MRCrypto1onï¼Œè¦ç”¨è½¯ä»¶æ¸…é›¶
+      this->WriteRawRC(BitFramingReg,0x07)                     ;//startsend=0,rxalign=0,åœ¨FIFOä¸­å­˜æ”¾çš„ä½ç½®ï¼ŒTXlastbit=7
+      this->SetBitMask(TxControlReg,0x03)                      ;//TX2rfen=1,TX1RFen=1,ä¼ é€’è°ƒåˆ¶çš„13.56MHZçš„è½½æ³¢ä¿¡å·
     
       ucComMF522Buf[0] = req_code                        ;
 
@@ -761,9 +730,9 @@ namespace rfid {
         unsigned int  unLen;
         unsigned char ucComMF522Buf[MAXRLEN]; 
         
-        this->ClearBitMask(Status2Reg,0x08);//Çå³ıMRCrypto1on£¬ÒªÓÃÈí¼şÇåÁã
-        this->WriteRawRC(BitFramingReg,0x00);//±íÊ¾×îºóÒ»¸ö×Ö½ÚËùÓĞÎ»¶¼·¢ËÍ
-        this->ClearBitMask(CollReg,0x80);//CollRegCollReg0³åÍ»½áÊøºó³åÍ»Î»±»ÖÃÁã
+        this->ClearBitMask(Status2Reg,0x08);//æ¸…é™¤MRCrypto1onï¼Œè¦ç”¨è½¯ä»¶æ¸…é›¶
+        this->WriteRawRC(BitFramingReg,0x00);//è¡¨ç¤ºæœ€åä¸€ä¸ªå­—èŠ‚æ‰€æœ‰ä½éƒ½å‘é€
+        this->ClearBitMask(CollReg,0x80);//CollRegCollReg0å†²çªç»“æŸåå†²çªä½è¢«ç½®é›¶
     
         ucComMF522Buf[0] = PICC_ANTICOLL1;
         ucComMF522Buf[1] = 0x20;
@@ -781,90 +750,88 @@ namespace rfid {
             {   status = MI_ERR;    }
         }
         
-        this->SetBitMask(CollReg,0x80);//CollRegCollReg ÔÚ106kbpsÁ¼ºÃµÄ·À³åÍ»Çé¿öÏÂ¸ÃÎ»ÖÃ1
+        this->SetBitMask(CollReg,0x80);//CollRegCollReg åœ¨106kbpsè‰¯å¥½çš„é˜²å†²çªæƒ…å†µä¸‹è¯¥ä½ç½®1
         return status;
     }
 
-    char rc522::PcdComMF522(unsigned char Command  ,unsigned char *pInData , 
-                    unsigned char InLenByte,unsigned char *pOutData, 
-                    unsigned int  *pOutLenBit                       )
+    char rc522::PcdComMF522(unsigned char Command ,unsigned char *pInData , unsigned char InLenByte,unsigned char *pOutData, unsigned int  *pOutLenBit)
     {
-      char status = MI_ERR                          ;
-      unsigned char irqEn   = 0x00                  ;
-      unsigned char waitFor = 0x00                  ;
-      unsigned char lastBits                        ;
-      unsigned char n                               ;
-      unsigned int  i                               ;
+      char status = MI_ERR;
+      unsigned char irqEn   = 0x00;
+      unsigned char waitFor = 0x00;
+      unsigned char lastBits;
+      unsigned char n;
+      unsigned int  i;
       switch (Command)
       {
         case PCD_AUTHENT:
-          irqEn   = 0x12                            ;
-          waitFor = 0x10                            ;
-          break                                     ;
+          irqEn   = 0x12;
+          waitFor = 0x10;
+          break;
         case PCD_TRANSCEIVE:
-          irqEn   = 0x77                            ;
-          waitFor = 0x30                            ;
-          break                                     ;
+          irqEn   = 0x77;
+          waitFor = 0x30;
+          break;
         default:
-          break                                     ;
+          break;
       }
-      this->WriteRawRC(ComIEnReg,irqEn|0x80)              ; //
-      this->ClearBitMask(ComIrqReg,0x80)                  ;
-      this->WriteRawRC(CommandReg,PCD_IDLE)               ;
-      this->SetBitMask(FIFOLevelReg,0x80)                 ; // Çå¿ÕFIFO 
+      this->WriteRawRC(ComIEnReg,irqEn|0x80);
+      this->ClearBitMask(ComIrqReg,0x80);
+      this->WriteRawRC(CommandReg,PCD_IDLE);
+      this->SetBitMask(FIFOLevelReg,0x80);
       for(i=0; i<InLenByte; i++)
-        this->WriteRawRC(FIFODataReg,pInData[i])          ; // Êı¾İĞ´ÈëFIFO 
-      this->WriteRawRC(CommandReg, Command)               ; // ÃüÁîĞ´ÈëÃüÁî¼Ä´æÆ÷
+        this->WriteRawRC(FIFODataReg,pInData[i]);
+      this->WriteRawRC(CommandReg, Command);
       if(Command == PCD_TRANSCEIVE)
-        this->SetBitMask(BitFramingReg,0x80)              ; // ¿ªÊ¼·¢ËÍ     
-      i = 6000                                      ; //¸ù¾İÊ±ÖÓÆµÂÊµ÷Õû£¬²Ù×÷M1¿¨×î´óµÈ´ıÊ±¼ä25ms
+        this->SetBitMask(BitFramingReg,0x80);    
+      i = 6000;
       do 
       {
-        n = this->ReadRawRC(ComIrqReg)                    ;
-        i--                                         ;
+        n = this->ReadRawRC(ComIrqReg);
+        i--;
       }
-      while((i!=0)&&!(n&0x01)&&!(n&waitFor))        ;
-      this->ClearBitMask(BitFramingReg,0x80)              ;
+      while((i!=0)&&!(n&0x01)&&!(n&waitFor));
+      this->ClearBitMask(BitFramingReg,0x80);
       if(i!=0)
       {
         if(!(this->ReadRawRC(ErrorReg)&0x1B))
         {
-          status = MI_OK                            ;
+          status = MI_OK;
           if (n&irqEn&0x01)
-            status = MI_NOTAGERR                    ;
+            status = MI_NOTAGERR;
           if(Command==PCD_TRANSCEIVE)
           {
-            n = this->ReadRawRC(FIFOLevelReg)             ;
-            lastBits = this->ReadRawRC(ControlReg)&0x07   ;
+            n = this->ReadRawRC(FIFOLevelReg);
+            lastBits = this->ReadRawRC(ControlReg)&0x07;
             if(lastBits)
-              *pOutLenBit = (n-1)*8 + lastBits      ;
+              *pOutLenBit = (n-1)*8 + lastBits;
             else
-              *pOutLenBit = n*8                     ;
+              *pOutLenBit = n*8;
             if(n==0)
-              n = 1                                 ;
+              n = 1;
             if(n>MAXRLEN)
-              n = MAXRLEN                           ;
+              n = MAXRLEN;
             for (i=0; i<n; i++)
-              pOutData[i] = this->ReadRawRC(FIFODataReg)  ; 
+              pOutData[i] = this->ReadRawRC(FIFODataReg); 
           }
         }
         else
-          status = MI_ERR                           ;        
+          status = MI_ERR;        
       }
-      this->SetBitMask(ControlReg,0x80)                   ;// stop timer now
-      this->WriteRawRC(CommandReg,PCD_IDLE)               ; 
+      this->SetBitMask(ControlReg,0x80);
+      this->WriteRawRC(CommandReg,PCD_IDLE); 
       return status;
     }
 
     void rc522::PcdAntennaOn()
     {
       unsigned char i;
-      this->WriteRawRC(TxASKReg,0x40)       ;
+      this->WriteRawRC(TxASKReg,0x40);
       HAL_Delay(1);
-      i = ReadRawRC(TxControlReg)     ;
+      i = ReadRawRC(TxControlReg);
       if(!(i&0x03))
         this->SetBitMask(TxControlReg, 0x03);
-      i = this->ReadRawRC(TxASKReg)       ;
+      i = this->ReadRawRC(TxASKReg);
     }
 
 
@@ -901,9 +868,9 @@ namespace rfid {
       this->RC522_SDA_LOW();
       HAL_Delay(10);
       ucAddr = ((Address<<1)&0x7E) ;
-      RC522_ReadWriteByte(ucAddr);
+      this->RC522_ReadWriteByte(ucAddr);
       HAL_Delay(10);
-      RC522_ReadWriteByte(value);
+      this->RC522_ReadWriteByte(value);
       HAL_Delay(10);
       this->RC522_SDA_HIGH();
     }
@@ -926,7 +893,7 @@ namespace rfid {
     {
       std::string result;
       uint8_t Temp[4];
-      if(this->PcdRequest(PICC_REQALL,Temp)==MI_OK)	//Ñ¡¿¨
+      if(this->PcdRequest(PICC_REQALL,Temp)==MI_OK)	//é€‰å¡
       {
         if(Temp[0]==0x04&&Temp[1]==0x00)  
             result = "MFOne-S50\r\n";
@@ -940,7 +907,7 @@ namespace rfid {
             result = "MF Desire\r\n";
         else
           result = "Unknown\r\n";
-        if(PcdAnticoll(this->m_uid)==MI_OK){
+        if(this->PcdAnticoll(this->m_uid)==MI_OK){
           return result + common::FormatString("Card Id is: %X%X%X%X\r\n",this->m_uid[0],this->m_uid[1],this->m_uid[2],this->m_uid[3]); 
         }
         return result;

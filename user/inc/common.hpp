@@ -47,10 +47,10 @@ namespace common {
         puts(str);
     }
 
-    inline void delay_ns(uint32_t ns)
+    inline void delay_ns(const uint32_t ns)
     {
-        volatile uint32_t i;
-        for(i=0;i<ns;i++)
+        uint32_t i;
+        for(i=0; i<ns ; ++i)
         {
             __asm("nop");
             __asm("nop");
