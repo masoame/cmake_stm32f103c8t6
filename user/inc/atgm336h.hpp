@@ -8,8 +8,8 @@ namespace gps {
 		atgm336h(UART_HandleTypeDef* atgm336h_huart);
 		~atgm336h();
 
-		void SendForWifi(serialport::Driver& wifi);
+		void SendToWifi(serialport::Driver& wifi);
 
-
+		inline bool Filter([[maybe_unused]]uint16_t& len) override { return true; };
 	};
 }

@@ -1,6 +1,10 @@
 #pragma once
+//关闭编译器警告
+#pragma GCC diagnostic push
 #include "stm32f103xb.h"
-#include<main.h>
+#include "main.h"
+//打开编译器警告
+#pragma GCC diagnostic pop
 #include<string>
 #include<chrono>
 #include <functional>
@@ -23,8 +27,11 @@ namespace common {
         }
     }
 
-    inline const auto LED1_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_13, std::placeholders::_1);
-
+    inline const auto LED_GREEN_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_13, std::placeholders::_1);
+    inline const auto LED_RED_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_14, std::placeholders::_1);
+    inline const auto LED_YELLOW_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_15, std::placeholders::_1);
+    inline const auto LED_WHITE_Blink = std::bind(LED_Blink, GPIOA, GPIO_PIN_0, std::placeholders::_1);
+    //inline const auto& LED1_Blink = LED_GREEN_Blink;
 
     extern void puts(const std::string& str);
 
@@ -37,8 +44,10 @@ namespace common {
         return result;
     }
 
-    inline __weak void puts([[maybe_unused]] const std::string& str){
+    __weak void puts([[maybe_unused]] const std::string& str);
 
+    void puts([[maybe_unused]] const std::string& str){
+        HAL_UART_Transmit(&huart1, (uint8_t*)str.c_str(), str.size(), 1000);
     };
 
     template <typename... Args>

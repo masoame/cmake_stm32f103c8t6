@@ -1,8 +1,6 @@
 #pragma once
 #include <common.hpp>
 
-
-
 extern"C" void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t Size);
 
 namespace callback{

@@ -1,6 +1,7 @@
 #pragma once
 #include <callback.hpp>
 #include <common.hpp>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 
@@ -26,19 +27,8 @@ namespace serialport {
 
         Driver(UART_HandleTypeDef* huart,DriverMode driver_type);
         ~Driver();
-        
-
-		bool OpenAsyncRecv(callback::UartCallbackType task = nullptr) const;
-		bool ContinueAsyncRecv() const;
-		bool CloseAsyncRecv() const;
-
-
-		bool WaitForRecvCallback(const std::chrono::milliseconds ms) const;
 
     public:
-        
-    	bool StartForwardSerialPort(::serialport::Driver& target_serialport) const;
-		bool StopForwardSerialPort() const;
         
         using ResponseType_Origin = uint8_t;
         enum ResponseType: ResponseType_Origin
@@ -78,13 +68,22 @@ namespace serialport {
             ResponseFlag():m_data{RESPONSE_TYPE_UNKNOWN}{}
         };
 
-        //GetResponseType GetResponseType(const std::string& response) const;
+        //异步读
+		bool OpenAsyncRecv(callback::UartCallbackType task = nullptr) const;
+		bool ContinueAsyncRecv() const;
+		bool CloseAsyncRecv() const;
+		bool WaitForRecvCallback(const std::chrono::milliseconds& ms) const;
 
-        ResponseFlag GetResponse(const std::string& cmd,const std::chrono::milliseconds ms, const std::initializer_list<std::string>& search_list, const uint8_t count = 1) const;
-        std::string GetResponseString(const std::string& cmd,const std::chrono::milliseconds ms, const uint8_t count = 1) const;
+        //同步读
+        bool Recv(uint16_t& RxLen,const std::chrono::milliseconds& time_out) ;
+        ResponseFlag GetResponse(const std::string& cmd,const std::chrono::milliseconds& ms, const std::initializer_list<std::string>& search_list, const uint8_t count = 1) ;
+        std::string GetResponseString(const std::string& cmd,const std::chrono::milliseconds& ms, const uint8_t count = 1);
+
+        //转发端口信息
+        bool StartForwardSerialPort(::serialport::Driver& target_serialport) const;
+		bool StopForwardSerialPort() const;
         
-
-        
-
+        //信息过滤器
+        virtual bool Filter(uint16_t& len) = 0;
     };
 }

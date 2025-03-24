@@ -1,6 +1,5 @@
 #pragma once
 #include <common.hpp>
-#include "stm32f103xb.h"
 
 #define MAXRLEN        18
 #define MIN_STRENGTH  228

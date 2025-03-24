@@ -1,5 +1,7 @@
 #pragma once
 #include "serialport.hpp"
+#include <queue>
+#include<vector>
 
 namespace wifi {
 
@@ -28,26 +30,22 @@ namespace wifi {
 		std::string m_ip;
 		unsigned short m_port = 0;
 
-		std::tuple<bool,std::string,unsigned short> m_tcp_link[4];
 	public:
 		esp8266(UART_HandleTypeDef* esp8266_huart,const std::string& ssid = {}, const std::string& password = {}, const std::string& ip = {}, unsigned short port = 0);
 
 		bool Reset();
-
 		bool ConnectTcp();
-
 
 		bool PowerOn();
 		bool PowerOff();
 
 		bool WifiIsConnected();
-
-
 		bool DisconnectWifi();
 
 		void Ping(const std::string& ip);
 		void CloseTcp();
 		Driver::ResponseFlag SendTcp(const std::string& data);
+		bool Filter(uint16_t& len) override;
 	private:
 		//Driver::ResponseType AddTcpLink(const std::string& ip, unsigned short port);
 		//Driver::ResponseType RemoveTcpLink(const std::string& ip, unsigned short port);

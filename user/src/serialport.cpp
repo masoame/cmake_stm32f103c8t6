@@ -1,5 +1,6 @@
 #include "serialport.hpp"
 #include "callback.hpp"
+#include <cstddef>
 #include <cstdint>
 
 namespace serialport {
@@ -17,9 +18,7 @@ Driver::~Driver()
 bool Driver::OpenAsyncRecv(callback::UartCallbackType task) const
 {
     if (this->m_recv_callback == nullptr) {
-
-        if (task != nullptr)
-            this->m_recv_callback = task;
+        if (task != nullptr) this->m_recv_callback = task;
 
         if (HAL_UARTEx_ReceiveToIdle_DMA(this->m_huart, this->m_recv_buffer.get(), Driver::m_recv_buffer_size) != HAL_OK) {
             return false;
@@ -53,7 +52,7 @@ bool Driver::StopForwardSerialPort() const
     return this->CloseAsyncRecv();
 }
 
-Driver::ResponseFlag Driver::GetResponse(const std::string& cmd, const std::chrono::milliseconds ms, const std::initializer_list<std::string>& search_list, const uint8_t count) const
+Driver::ResponseFlag Driver::GetResponse(const std::string& cmd, const std::chrono::milliseconds& ms, const std::initializer_list<std::string>& search_list, const uint8_t count)
 {
     Driver::ResponseFlag flag;
     auto str = this->GetResponseString(cmd, ms, count);
@@ -75,7 +74,7 @@ Driver::ResponseFlag Driver::GetResponse(const std::string& cmd, const std::chro
     }
     return flag;
 }
-std::string Driver::GetResponseString(const std::string& cmd, const std::chrono::milliseconds ms, const uint8_t count) const
+std::string Driver::GetResponseString(const std::string& cmd, const std::chrono::milliseconds& ms, const uint8_t count)
 {
     std::string response;
     uint16_t RxLen;
@@ -86,16 +85,18 @@ std::string Driver::GetResponseString(const std::string& cmd, const std::chrono:
         }
     }
     for (int i = 0; i < count; i++) {
-        auto ret = HAL_UARTEx_ReceiveToIdle(this->m_huart, this->m_recv_buffer.get(), Driver::m_recv_buffer_size, &RxLen, ms.count());
-        if (ret == HAL_OK) {
-            response.append(this->m_recv_buffer.get(), this->m_recv_buffer.get() + RxLen);
-        } else if (ret == HAL_TIMEOUT) {
-            return response;
-        } else {
-            return response;
-        }
+        if(Recv(RxLen,ms) == false) continue;
+        response.append(this->m_recv_buffer.get(), this->m_recv_buffer.get() + RxLen);
     }
     return response;
 }
 
+bool Driver::Recv(uint16_t& RxLen,const std::chrono::milliseconds& ms)
+{
+    auto ret = HAL_UARTEx_ReceiveToIdle(this->m_huart, this->m_recv_buffer.get(), Driver::m_recv_buffer_size, (uint16_t*)&RxLen, ms.count());
+    if (ret == HAL_OK && Filter(RxLen) == true) {
+        return true;
+    }
+    return false;
+}
 }
