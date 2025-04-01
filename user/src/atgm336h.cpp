@@ -1,7 +1,6 @@
 #include "atgm336h.hpp"
 #include "esp8266.hpp"
 #include "serialport.hpp"
-#include <algorithm>
 
 
 namespace gps {
@@ -34,7 +33,7 @@ void atgm336h::SendToWifi(serialport::Driver& wifi)
         this->ContinueAsyncRecv();
     });
 }
-    inline bool Filter(std::size_t& len)
+    inline bool Filter([[maybe_unused]]std::size_t& len)
     {
         return true;
     }

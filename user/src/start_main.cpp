@@ -52,20 +52,10 @@ void start_main()
             case recv:
 
             {
-                
+
             }
 
             break;
         }
-
-
-        if(model == send){
-
-        }
-        else {
-        
-        }
-
-
     }
 }
