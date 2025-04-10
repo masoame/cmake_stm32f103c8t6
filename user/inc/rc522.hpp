@@ -199,6 +199,8 @@ namespace rfid {
         char PcdAnticoll(unsigned char *pSnr);
         char PcdComMF522(unsigned char Command  ,unsigned char *pInData , unsigned char InLenByte,unsigned char *pOutData, unsigned int  *pOutLenBit);
 
+        char PcdRead(unsigned char addr,unsigned char *pData);
+        void CalulateCRC ( unsigned char * pIndata, unsigned char ucLen, unsigned char * pOutData );
         std::string ReaderCard(void);
 
 private:

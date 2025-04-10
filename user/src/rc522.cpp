@@ -382,32 +382,7 @@
 //    return status;
 //}
 
-////******************************************************************/
-////功    能：读取M1卡一块数据
-////参数说明: addr[IN]：块地址
-////          pData[OUT]：读出的数据，16字节
-////返    回: 成功返回MI_OK
-////******************************************************************/
-// char PcdRead(unsigned char addr,unsigned char *pData)
-//{
-//     char status                                          ;
-//     unsigned int  unLen                                  ;
-//     unsigned char i,ucComMF522Buf[MAXRLEN]               ;
 
-//    ucComMF522Buf[0] = PICC_READ                         ;
-//    ucComMF522Buf[1] = addr                              ;
-//    CalulateCRC(ucComMF522Buf,2,&ucComMF522Buf[2])       ;
-//    status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,4,
-//                         ucComMF522Buf,&unLen           );
-//    if ((status == MI_OK) && (unLen == 0x90))
-//    {
-//        for (i=0; i<16; i++)
-//            *(pData+i) = ucComMF522Buf[i];
-//    }
-//    else
-//      status = MI_ERR;
-//    return status;
-//}
 
 ////******************************************************************/
 ////功    能：读取M1卡一块数据
@@ -892,4 +867,67 @@ std::string rc522::ReaderCard(void)
     }
     return {};
 }
+/*
+ * 函数名：CalulateCRC
+ * 描述  ：用RC522计算CRC16
+ * 输入  ：pIndata，计算CRC16的数组
+ *         ucLen，计算CRC16的数组字节长度
+ *         pOutData，存放计算结果存放的首地址
+ * 返回  : 无
+ * 调用  ：内部调用
+ */
+ void rc522::CalulateCRC ( unsigned char * pIndata, unsigned char ucLen, unsigned char * pOutData )
+ {
+    unsigned char uc, ucN;
+ 
+     ClearBitMask(DivIrqReg, 0x04);
+ 
+     WriteRawRC(CommandReg, PCD_IDLE);
+ 
+     SetBitMask(FIFOLevelReg, 0x80);
+ 
+     for ( uc = 0; uc < ucLen; uc ++)
+         WriteRawRC ( FIFODataReg, * ( pIndata + uc ) );
+ 
+     WriteRawRC ( CommandReg, PCD_CALCCRC );
+ 
+     uc = 0xFF;
+ 
+     do
+     {
+         ucN = ReadRawRC ( DivIrqReg );
+         uc --;
+     } while ( ( uc != 0 ) && ! ( ucN & 0x04 ) );
+ 
+     pOutData [ 0 ] = ReadRawRC ( CRCResultRegL );
+     pOutData [ 1 ] = ReadRawRC ( CRCResultRegM );
+ }
+
+////******************************************************************/
+////功    能：读取M1卡一块数据
+////参数说明: addr[IN]：块地址
+////          pData[OUT]：读出的数据，16字节
+////返    回: 成功返回MI_OK
+////******************************************************************/
+char rc522::PcdRead(unsigned char addr,unsigned char *pData)
+{
+    char status                                          ;
+    unsigned int  unLen                                  ;
+    unsigned char i,ucComMF522Buf[MAXRLEN]               ;
+
+   ucComMF522Buf[0] = PICC_READ                         ;
+   ucComMF522Buf[1] = addr                              ;
+   CalulateCRC(ucComMF522Buf,2,&ucComMF522Buf[2])       ;
+   status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,4,ucComMF522Buf,&unLen);
+   if ((status == MI_OK) && (unLen == 0x90))
+   {
+       for (i=0; i<16; i++)
+           *(pData+i) = ucComMF522Buf[i];
+   }
+   else
+     status = MI_ERR;
+   return status;
+}
+
+
 }

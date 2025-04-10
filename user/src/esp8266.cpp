@@ -78,7 +78,7 @@ esp8266::Driver::ResponseFlag esp8266::LinkTcp(const std::string& ip, unsigned s
 
 esp8266::Driver::ResponseFlag esp8266::SendTcp(const std::string& data)
 {
-
+    common::LED_GREEN_Blink(2);
     std::string _cmd = common::FormatString("AT+CIPSENDEX=%d\r\n", data.size());
 
     if (this->GetResponse(_cmd, 500ms, { "\r\n>" }) != Driver::ResponseType::RESPONSE_TYPE_OK)
