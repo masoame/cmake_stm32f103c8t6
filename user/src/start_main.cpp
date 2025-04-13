@@ -16,11 +16,6 @@ constexpr auto RC522_SDA_GPIO_Port = GPIOB_BASE;
 constexpr auto RC522_RST_Pin = GPIO_PIN_9;
 constexpr auto RC522_RST_GPIO_Port = GPIOB_BASE;
 
-enum Model{
-    recv,
-    send
-};
-
 using namespace std::literals;
 // void start_main()
 // {
@@ -81,7 +76,7 @@ void start_main(void)
     gps::atgm336h _gps(&huart1);
     rfid::rc522 _rfid(&hspi2, reinterpret_cast<GPIO_TypeDef*>(RC522_SDA_GPIO_Port), RC522_SDA_Pin, reinterpret_cast<GPIO_TypeDef*>(RC522_RST_GPIO_Port), RC522_RST_Pin);
 	
-	
+
 	
 	OLED_Init();
 	OLED_ColorTurn(0);

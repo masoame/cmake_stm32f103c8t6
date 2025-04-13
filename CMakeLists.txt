@@ -79,5 +79,5 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
     COMMAND ${CMAKE_OBJCOPY} -O binary ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.bin
     COMMAND ${CMAKE_OBJCOPY} -O ihex ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.hex
     COMMAND ${CMAKE_SIZE} ${CMAKE_PROJECT_NAME}.elf
-
+    COMMAND ${CMAKE_COMMAND} -E copy compile_commands.json ${CMAKE_BINARY_DIR}/../compile_commands.json
 )
