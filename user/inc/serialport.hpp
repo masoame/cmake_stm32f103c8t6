@@ -11,7 +11,7 @@ namespace serialport {
     //template<DriverType driver_type = INTERRUPT>
     class Driver 
     {
-        constexpr static const std::size_t m_recv_buffer_size = 512;
+        constexpr static const std::size_t m_recv_buffer_size = 1024;
     public:
 
         enum DriverMode{

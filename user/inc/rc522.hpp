@@ -192,18 +192,12 @@ namespace rfid {
         rc522(SPI_HandleTypeDef* const hspi, GPIO_TypeDef* const sda_port,const uint16_t sda_pin,GPIO_TypeDef* const rst_port,const uint16_t rst_pin);
         ~rc522();
         
-        char PcdReset();
-        void PcdAntennaOn();
-        void PcdAntennaOff();
-        char PcdRequest(unsigned char req_code,unsigned char *pTagType);
-        char PcdAnticoll(unsigned char *pSnr);
-        char PcdComMF522(unsigned char Command  ,unsigned char *pInData , unsigned char InLenByte,unsigned char *pOutData, unsigned int  *pOutLenBit);
-
+        
         char PcdRead(unsigned char addr,unsigned char *pData);
         void CalulateCRC ( unsigned char * pIndata, unsigned char ucLen, unsigned char * pOutData );
         std::string ReaderCard(void);
 
-private:
+    private:
         unsigned char m_uid[4];
         SPI_HandleTypeDef* const m_hspi;
         
@@ -215,6 +209,14 @@ private:
         void WriteRawRC(unsigned char Address, unsigned char value);
         void SetBitMask(unsigned char reg,unsigned char mask);
         void ClearBitMask(unsigned char reg,unsigned char mask);
+
+        char PcdReset();
+        void PcdAntennaOn();
+        void PcdAntennaOff();
+        char PcdRequest(unsigned char req_code,unsigned char *pTagType);
+        char PcdAnticoll(unsigned char *pSnr);
+        char PcdComMF522(unsigned char Command  ,unsigned char *pInData , unsigned char InLenByte,unsigned char *pOutData, unsigned int  *pOutLenBit);
+
 
         inline void RC522_SDA_HIGH(){
             HAL_GPIO_WritePin(m_sda_port, m_sda_pin, GPIO_PIN_SET);

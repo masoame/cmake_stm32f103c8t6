@@ -7,7 +7,7 @@
         {
             "name": "Cortex Debug",
             "cwd": "${workspaceFolder}",
-            "executable": "./build/cmake_stm32f103c8t6.elf",
+            "executable": "./build/${command:cmake.buildType}/cmake_stm32f103c8t6.elf",
             "request": "launch",
             "type": "cortex-debug",
 

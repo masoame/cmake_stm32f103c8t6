@@ -66,4 +66,34 @@ namespace common {
             __asm("nop");
         }
     }
+
+    enum KeyState : uint8_t
+    {
+        NO_Press = 0x00,
+        Key1_Press = 0x01,
+        Key2_Press = 0x02,
+
+    };
+inline const auto& KEY1 = std::bind(HAL_GPIO_ReadPin, GPIOA, GPIO_PIN_11);
+inline const auto KEY2 = std::bind(HAL_GPIO_ReadPin, GPIOA, GPIO_PIN_12);
+
+    inline KeyState KEY_Scan(uint8_t mode)
+    {
+        static bool key_up = true;  
+        if(mode==true)
+            key_up=true;
+        if(key_up && (KEY1()==1/*||KEY2() ==1*/))
+        {
+            HAL_Delay(10);
+            key_up= false;
+            if(KEY1() == 1){
+                return Key1_Press; 
+            }// else if(KEY2() == 1){
+            //     return Key2_Press;
+            // } 
+        }else if(KEY1()==0 /*&& KEY2() ==0*/){
+            key_up=1;
+        }
+        return NO_Press; 
+    }
 }

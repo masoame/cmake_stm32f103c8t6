@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace serialport {
+using namespace serialport;
 
 Driver::Driver(UART_HandleTypeDef* huart, [[maybe_unused]] DriverMode driver_type)
     : m_huart(huart)
@@ -99,4 +99,4 @@ bool Driver::Recv(uint16_t& RxLen,const std::chrono::milliseconds& ms)
     }
     return false;
 }
-}
+

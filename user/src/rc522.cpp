@@ -845,7 +845,8 @@ void rc522::ClearBitMask(unsigned char reg, unsigned char mask)
 std::string rc522::ReaderCard(void)
 {
     std::string result;
-    uint8_t Temp[4];
+    uint32_t CardId;
+    auto Temp = reinterpret_cast<uint8_t*>(&CardId);
     if (this->PcdRequest(PICC_REQALL, Temp) == MI_OK) // 选卡
     {
         if (Temp[0] == 0x04 && Temp[1] == 0x00)
@@ -861,9 +862,9 @@ std::string rc522::ReaderCard(void)
         else
             result = "Unknown\r\n";
         if (this->PcdAnticoll(this->m_uid) == MI_OK) {
-            return result + common::FormatString("Card Id is: %X%X%X%X\r\n", this->m_uid[0], this->m_uid[1], this->m_uid[2], this->m_uid[3]);
+            return result + common::FormatString("Card Id is: %X\r\n", *reinterpret_cast<uint32_t*>(this->m_uid));
         }
-        return result;
+        //return result;
     }
     return {};
 }
