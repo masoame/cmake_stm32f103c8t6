@@ -45,6 +45,7 @@ namespace wifi {
 		void CloseTcp();
 		Driver::ResponseFlag SendTcp(const std::string& data);
 		bool Filter(uint16_t& len) override;
+
 	private:
 		//Driver::ResponseType AddTcpLink(const std::string& ip, unsigned short port);
 		//Driver::ResponseType RemoveTcpLink(const std::string& ip, unsigned short port);

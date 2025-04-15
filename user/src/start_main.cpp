@@ -1,13 +1,9 @@
-
 #include "start_main.hpp"
 #include "atgm336h.hpp"
 #include "common.hpp"
 #include "esp8266.hpp"
-
 #include "rc522.hpp"
-
 #include "oled.hpp"
-
 #include "stm32f1xx_hal.h"
 #include <cstdint>
 
@@ -69,27 +65,68 @@ using namespace std::literals;
 //     }
 // }
 using namespace oled;
-char buf[1024];
+
+
+
+
 void start_main(void)
 {
 	wifi::esp8266 _wifi(&huart2, "ChinaNet-srMh", "r5phqngt", "192.168.2.52", 8080);
-    gps::atgm336h _gps(&huart1);
     rfid::rc522 _rfid(&hspi2, reinterpret_cast<GPIO_TypeDef*>(RC522_SDA_GPIO_Port), RC522_SDA_Pin, reinterpret_cast<GPIO_TypeDef*>(RC522_RST_GPIO_Port), RC522_RST_Pin);
-	
+	gps::atgm336h _gps(&huart1);
 
-	
 	OLED_Init();
-	OLED_ColorTurn(0);
+	OLED_ColorTurn(1);
     OLED_DisplayTurn(0);
-	while(1)
+
+	static char warehouse_number[] = ": 0";
+	static char shelf_number[] = ": 0";
+
+	OLED_ShowChinese(0, 0, 0, 16, 0);
+	OLED_ShowChinese(16, 0, 1, 16, 0);
+	OLED_ShowChinese(32, 0, 2, 16, 0);
+	OLED_ShowString(48, 0, reinterpret_cast<unsigned char*>(warehouse_number), 16, 0);
+
+	OLED_ShowChinese(0, 16, 3, 16, 0);
+	OLED_ShowChinese(16, 16, 4, 16, 0);
+	OLED_ShowChinese(32, 16, 2, 16, 0);
+	OLED_ShowString(48, 16, reinterpret_cast<unsigned char*>(shelf_number), 16, 0);
+
+	OLED_ShowChinese(0, 48, 5, 16, 0);
+	OLED_ShowChinese(16, 48, 6, 16, 0);
+	OLED_ShowChinese(32, 48, 7, 16, 0);
+	OLED_ShowChinese(48, 48, 8, 16, 0);
+	
+	OLED_Refresh();
+
+	//std::string gps_data = _gps.WaitGetData();
+
+	while(true)
 	{
 		auto a = _rfid.ReaderCard();
 		if(a.empty() || a == ""){
-			HAL_Delay(50);
+
+			static bool wait_release = false;
+			if(common::KEY1()==true){
+				wait_release = true;
+				HAL_Delay(400);
+				while(common::KEY1()==true){
+					wait_release = false;
+					warehouse_number[2] = (warehouse_number[2] - '0' + 1)%7 + '0';
+					OLED_ShowString(48, 0, reinterpret_cast<unsigned char*>(warehouse_number), 16, 0);
+					OLED_Refresh();
+					HAL_Delay(200);
+				}
+
+			}else if(wait_release == true){
+				wait_release = false;
+				warehouse_number[2] = (warehouse_number[2] - '0' + 1)%7 + '0';
+				OLED_ShowString(48, 0, reinterpret_cast<unsigned char*>(warehouse_number), 16, 0);
+				OLED_Refresh();
+			}
 			continue;
 		}
-		OLED_ShowString(0,0,(u8*)a.c_str(),12,1);
-		OLED_Refresh();
+
 		uint16_t len;
 		_gps.Recv(len, 5s);
 		_gps.m_recv_buffer[len]=0;

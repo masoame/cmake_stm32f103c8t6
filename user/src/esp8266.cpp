@@ -98,7 +98,8 @@ bool esp8266::Filter(uint16_t& len)
     if (start_ptr != end_ptr) {
         start_ptr += search_str.size();
         uint8_t* _ptr = std::find(start_ptr, end_ptr, ':');
-        if(_ptr == end_ptr) return false;
+        if(_ptr == end_ptr) 
+            return false;
         int i = std::stoi(std::string(start_ptr, _ptr));
         //common::LED1_Blink(i);
         return false;

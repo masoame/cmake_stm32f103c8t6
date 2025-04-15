@@ -69,8 +69,7 @@ namespace oled
     //更新显存到OLED	
     void OLED_Refresh(void)
     {
-        u8 i,n;
-        for(i=0;i<8;i++)
+        for(unsigned char i=0;i<8;i++)
         {
             OLED_WR_Byte(0xb0+i,OLED_CMD); //设置行起始地址
             OLED_WR_Byte(0x00,OLED_CMD);   //设置低列起始地址
@@ -80,9 +79,8 @@ namespace oled
 
                 tmp[n]= OLED_GRAM[n][i];
             }
-            HAL_I2C_Mem_Write(&hi2c1 ,0x78,0x40,I2C_MEMADD_SIZE_8BIT,tmp,128,0x100);;
-
-      }
+            HAL_I2C_Mem_Write(&hi2c1 ,0x78,0x40,I2C_MEMADD_SIZE_8BIT,tmp,128,0x100);
+        }
     }
     //清屏函数
     void OLED_Clear(void)
@@ -363,45 +361,28 @@ namespace oled
         {
              for(i=0;i<sizex;i++)
              {
-                    temp=BMP[j];
-                    j++;
-                    for(m=0;m<8;m++)
-                    {
-                        if(temp&0x01)OLED_DrawPoint(x,y,mode);
-                        else OLED_DrawPoint(x,y,!mode);
-                        temp>>=1;
-                        y++;
-                    }
-                    x++;
-                    if((x-x0)==sizex)
-                    {
-                        x=x0;
-                        y0=y0+8;
-                    }
-                    y=y0;
-         }
-         }
+                temp=BMP[j];
+                j++;
+                for(m=0;m<8;m++)
+                {
+                    if(temp&0x01)OLED_DrawPoint(x,y,mode);
+                    else OLED_DrawPoint(x,y,!mode);
+                    temp>>=1;
+                    y++;
+                }
+                x++;
+                if((x-x0)==sizex)
+                {
+                    x=x0;
+                    y0=y0+8;
+                }
+                y=y0;
+            }
+        }
     }
     //OLED的初始化
     void OLED_Init(void)
     {
-        // GPIO_InitTypeDef  GPIO_InitStructure;
-        //  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);	 //使能A端口时钟
-        // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;	 
-        //  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD; 		 //推挽输出
-        // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速度50MHz
-        //  GPIO_Init(GPIOA, &GPIO_InitStructure);	  //初始化PA0,1
-        //  GPIO_SetBits(GPIOA,GPIO_Pin_0|GPIO_Pin_1);
-    
-        // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;	 
-        //  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
-        // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速度50MHz
-        //  GPIO_Init(GPIOA, &GPIO_InitStructure);	  //初始化PA2
-        //  GPIO_SetBits(GPIOA,GPIO_Pin_2);
-        
-        // OLED_RES_Clr();
-        // delay_ms(200);
-        // OLED_RES_Set();
         
         OLED_WR_Byte(0xAE,OLED_CMD);//--turn off oled panel
         OLED_WR_Byte(0x00,OLED_CMD);//---set low column address

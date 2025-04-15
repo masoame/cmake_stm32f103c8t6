@@ -9,7 +9,8 @@ namespace gps {
 		~atgm336h();
 
 		void SendToWifi(serialport::Driver& wifi);
-
+		std::string WaitGetData();
+		
 		inline bool Filter([[maybe_unused]]uint16_t& len) override { return true; };
 	};
 }
