@@ -76,8 +76,8 @@ namespace serialport {
 
         //同步读
         bool Recv(uint16_t& RxLen,const std::chrono::milliseconds& time_out) ;
-        ResponseFlag GetResponse(const std::string& cmd,const std::chrono::milliseconds& ms, const std::initializer_list<std::string>& search_list, const uint8_t count = 1) ;
-        std::string GetResponseString(const std::string& cmd,const std::chrono::milliseconds& ms, const uint8_t count = 1);
+        ResponseFlag GetResponse(std::string_view cmd,const std::chrono::milliseconds& ms, const std::initializer_list<std::string>& search_list, const uint8_t count = 1) ;
+        std::string GetResponseString(std::string_view cmd,const std::chrono::milliseconds& ms, const uint8_t count = 1);
 
         //转发端口信息
         bool StartForwardSerialPort(::serialport::Driver& target_serialport) const;

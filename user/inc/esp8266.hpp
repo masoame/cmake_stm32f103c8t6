@@ -43,7 +43,7 @@ namespace wifi {
 
 		void Ping(const std::string& ip);
 		void CloseTcp();
-		Driver::ResponseFlag SendTcp(const std::string& data);
+		Driver::ResponseFlag SendTcp(std::string_view data);
 		bool Filter(uint16_t& len) override;
 
 	private:

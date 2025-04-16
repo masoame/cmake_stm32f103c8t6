@@ -48,10 +48,11 @@ namespace gps {
 
             if ((start_ptr = std::search(start_ptr, end_ptr, search_data, search_data + sizeof(search_data) - 1)) != end_ptr) {
                 end_ptr = std::find(start_ptr, end_ptr, '\n');
-                if (start_ptr == end_ptr || *end_ptr != '\n')
+                if (start_ptr == end_ptr || *end_ptr != '\n'){
                     continue;
-                else
+                }else{
                     return std::string(start_ptr, end_ptr + 1);
+                }
             }
         }
     }

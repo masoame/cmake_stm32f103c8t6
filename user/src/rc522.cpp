@@ -912,13 +912,13 @@ std::string rc522::ReaderCard(void)
 ////******************************************************************/
 char rc522::PcdRead(unsigned char addr,unsigned char *pData)
 {
-    char status                                          ;
-    unsigned int  unLen                                  ;
-    unsigned char i,ucComMF522Buf[MAXRLEN]               ;
+    char status;
+    unsigned int  unLen;
+    unsigned char i,ucComMF522Buf[MAXRLEN];
 
-   ucComMF522Buf[0] = PICC_READ                         ;
-   ucComMF522Buf[1] = addr                              ;
-   CalulateCRC(ucComMF522Buf,2,&ucComMF522Buf[2])       ;
+   ucComMF522Buf[0] = PICC_READ;
+   ucComMF522Buf[1] = addr;
+   CalulateCRC(ucComMF522Buf,2,&ucComMF522Buf[2]);
    status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,4,ucComMF522Buf,&unLen);
    if ((status == MI_OK) && (unLen == 0x90))
    {

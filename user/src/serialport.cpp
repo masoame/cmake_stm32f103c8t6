@@ -52,7 +52,7 @@ bool Driver::StopForwardSerialPort() const
     return this->CloseAsyncRecv();
 }
 
-Driver::ResponseFlag Driver::GetResponse(const std::string& cmd, const std::chrono::milliseconds& ms, const std::initializer_list<std::string>& search_list, const uint8_t count)
+Driver::ResponseFlag Driver::GetResponse(std::string_view cmd, const std::chrono::milliseconds& ms, const std::initializer_list<std::string>& search_list, const uint8_t count)
 {
     Driver::ResponseFlag flag;
     auto str = this->GetResponseString(cmd, ms, count);
@@ -74,12 +74,12 @@ Driver::ResponseFlag Driver::GetResponse(const std::string& cmd, const std::chro
     }
     return flag;
 }
-std::string Driver::GetResponseString(const std::string& cmd, const std::chrono::milliseconds& ms, const uint8_t count)
+std::string Driver::GetResponseString(std::string_view cmd, const std::chrono::milliseconds& ms, const uint8_t count)
 {
     std::string response;
     uint16_t RxLen;
     if (cmd.empty() == false && cmd != "") {
-        auto ret = HAL_UART_Transmit(&huart2, (const uint8_t*)cmd.c_str(), cmd.size(), ms.count());
+        auto ret = HAL_UART_Transmit(&huart2, (const uint8_t*)cmd.data(), cmd.size(), ms.count());
         if (ret != HAL_OK) {
             return response;
         }

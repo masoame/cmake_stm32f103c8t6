@@ -12,6 +12,8 @@
 #define DISABLE_INTERRUPTS()  __asm__ __volatile__("": : :"memory")
 #define BREAK_POINT() __asm__ __volatile__("bkpt #0")
 
+#define KEY1() HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_11)
+#define KEY2() HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_12)
 namespace common {
 
     using namespace std::chrono_literals;
@@ -27,11 +29,16 @@ namespace common {
         }
     }
 
-    inline const auto LED_GREEN_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_13, std::placeholders::_1);
-    inline const auto LED_RED_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_14, std::placeholders::_1);
-    inline const auto LED_YELLOW_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_15, std::placeholders::_1);
-    inline const auto LED_WHITE_Blink = std::bind(LED_Blink, GPIOA, GPIO_PIN_0, std::placeholders::_1);
-    //inline const auto& LED1_Blink = LED_GREEN_Blink;
+    #define LED_GREEN_Blink(count) LED_Blink(GPIOC,GPIO_PIN_13,count)
+    #define LED_RED_Blink(count) LED_Blink(GPIOC,GPIO_PIN_14,count)
+    #define LED_YELLOW_Blink(count) LED_Blink(GPIOC,GPIO_PIN_15,count)
+    #define LED_WHITE_Blink(count) LED_Blink(GPIOA,GPIO_PIN_0,count)
+
+    // inline const auto& LED_GREEN_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_13, std::placeholders::_1);
+    // inline const auto& LED_RED_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_14, std::placeholders::_1);
+    // inline const auto& LED_YELLOW_Blink = std::bind(LED_Blink, GPIOC, GPIO_PIN_15, std::placeholders::_1);
+    // inline const auto& LED_WHITE_Blink = std::bind(LED_Blink, GPIOA, GPIO_PIN_0, std::placeholders::_1);
+
 
     extern void puts(const std::string& str);
 
@@ -40,7 +47,7 @@ namespace common {
 
         int len = std::snprintf(nullptr, 0, format, args...);
         std::string result(len + 1, '\0');
-        std::snprintf(&result[0], len + 1, format, args...);
+        std::snprintf(result.data(), len + 1, format, args...);
         return result;
     }
 
@@ -74,8 +81,10 @@ namespace common {
         Key2_Press = 0x02,
 
     };
-inline const auto& KEY1 = std::bind(HAL_GPIO_ReadPin, GPIOA, GPIO_PIN_11);
-inline const auto KEY2 = std::bind(HAL_GPIO_ReadPin, GPIOA, GPIO_PIN_12);
+
+
+// inline const auto& KEY1 = std::bind(HAL_GPIO_ReadPin, GPIOA, GPIO_PIN_11);
+// inline const auto KEY2 = std::bind(HAL_GPIO_ReadPin, GPIOA, GPIO_PIN_12);
 
     inline KeyState KEY_Scan(uint8_t mode)
     {

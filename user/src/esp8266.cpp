@@ -1,9 +1,12 @@
 #include "esp8266.hpp"
 #include "common.hpp"
 #include "serialport.hpp"
+#include <charconv>
 #include <cstdint>
 #include <algorithm>
 #include <string>
+#include <string_view>
+#include <system_error>
 namespace wifi {
 using namespace std::chrono_literals;
 
@@ -30,7 +33,7 @@ bool esp8266::Reset()
     while (this->LinkTcp(m_ip, m_port) != serialport::Driver::RESPONSE_TYPE_OK) {
         common::LED_YELLOW_Blink(4);
     }
-    this->SendTcp("hello world\r\n");
+    //this->SendTcp("hello world\r\n");
     return true;
 }
 
@@ -76,10 +79,10 @@ esp8266::Driver::ResponseFlag esp8266::LinkTcp(const std::string& ip, unsigned s
     return this->GetResponse(_cmd, 5s, { "OK", "ALREADY CONNECTED" });
 }
 
-esp8266::Driver::ResponseFlag esp8266::SendTcp(const std::string& data)
+esp8266::Driver::ResponseFlag esp8266::SendTcp(std::string_view data)
 {
     if (data.empty() || data == "") return Driver::ResponseType::RESPONSE_TYPE_ERROR;
-    common::LED_GREEN_Blink(2);
+    common::LED_WHITE_Blink(2);
     std::string _cmd = common::FormatString("AT+CIPSENDEX=%d\r\n", data.size());
 
     if (this->GetResponse(_cmd, 500ms, { "\r\n>" }) != Driver::ResponseType::RESPONSE_TYPE_OK)
@@ -90,18 +93,23 @@ esp8266::Driver::ResponseFlag esp8266::SendTcp(const std::string& data)
 
 bool esp8266::Filter(uint16_t& len)
 { 
-    //std::string str(this->m_recv_buffer.get(), this->m_recv_buffer.get()+len);
-    const std::string search_str = "+IPD,";
-    uint8_t* start_ptr = this->m_recv_buffer.get();
-    uint8_t* end_ptr = this->m_recv_buffer.get() + len;
-    start_ptr = std::search(start_ptr, end_ptr, search_str.begin(), search_str.end());
-    if (start_ptr != end_ptr) {
-        start_ptr += search_str.size();
-        uint8_t* _ptr = std::find(start_ptr, end_ptr, ':');
-        if(_ptr == end_ptr) 
-            return false;
-        int i = std::stoi(std::string(start_ptr, _ptr));
-        //common::LED1_Blink(i);
+    static std::string_view search_str = "+IPD,";
+    std::string_view recv_buf {(char*)this->m_recv_buffer.get(),len};
+    std::size_t pos;
+    if ((pos = recv_buf.find(search_str, 0)) != std::string_view::npos) {
+        std::size_t num_start = pos + search_str.size();
+        if((pos = recv_buf.find_first_of(':',num_start))!=std::string_view::npos){
+            unsigned short value = 0;
+            auto [ptr,err] = std::from_chars(recv_buf.data() + num_start, recv_buf.data()+pos, value);
+            if(err == std::errc() && value!=0){
+                std::string_view server_data {recv_buf.data()+pos+1,value};
+                if(server_data == "ok!"){
+                    common::LED_GREEN_Blink(2);
+                }else if(server_data == "error!"){
+                    common::LED_RED_Blink(2);
+                }
+            }
+        }
         return false;
     } 
     return true; 

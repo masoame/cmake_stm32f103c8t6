@@ -56,6 +56,12 @@
         {
             "name": "MinSizeRel",
             "configurePreset": "MinSizeRel"
+        },
+        {
+            "name": "Enter",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Release"
         }
     ]
 }
